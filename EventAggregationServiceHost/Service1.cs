@@ -1,19 +1,36 @@
 ﻿using EAS_Development_Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.ServiceProcess;
 
 namespace EventAggregationServiceHost
 {
     public partial class Service1 : ServiceBase
     {
+        string BaseDirectory => new FileInfo(Assembly.GetEntryAssembly().Location).Directory.ToString();
         public Service1()
         {
             InitializeComponent();
         }
 
         protected override void OnStart(string[] args)
+        {
+            try
+            {
+                Start();
+            }
+            catch (Exception e)
+            {
+                File.WriteAllText($@"{BaseDirectory}\Errors.txt", e.Message);
+                throw;
+            }
+
+        }
+
+        private void Start()
         {
             GetAssemblies();
             LoadBootstrappers();
@@ -32,11 +49,17 @@ namespace EventAggregationServiceHost
         {
             Configuration.Bootstrappers = GetClassesOfType<IBootstrapper>();
             Configuration.Bootstrappers.ForEach(b => b.Init());
-                
+
         }
         private void GetAssemblies()
         {
+            var files = Directory
+                .GetFiles($@"{BaseDirectory}\Plugins")
+                .Where(file => file.ToLower()
+                    .EndsWith(".dll"))
+                .ToList();
 
+            Configuration.Assemblies = files.Select(Assembly.LoadFile).ToList();
         }
         private void LoadCommands()
         {
@@ -64,7 +87,7 @@ namespace EventAggregationServiceHost
             return Configuration
                 .Assemblies
                 .SelectMany(assembly => assembly.GetTypes().Where(type => typeof(TType).IsAssignableFrom(type)))
-                .Select(c =>(TType) Activator.CreateInstance(c))
+                .Select(c => (TType)Activator.CreateInstance(c))
                 .ToList();
 
         }

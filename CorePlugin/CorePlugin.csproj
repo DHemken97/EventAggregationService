@@ -41,12 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\Shutdown.cs" />
+    <Compile Include="Commands\Help.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\TelnetServer.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Commands\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\EAS_Development_Interfaces\EAS_Development_Interfaces.csproj">
       <Project>{40F67718-4A78-41C2-AFA1-6E4C1F71FA83}</Project>
