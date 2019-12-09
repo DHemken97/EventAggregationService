@@ -28,8 +28,8 @@ namespace SystemPlugin.EventSources
             });
         }
 
-        public string Name { get=> "Clock"; }
-        public string Description { get => "Event Fires After Given interval"; }
+        public string Name => "Clock";
+        public string Description => "Event Fires After Given interval";
         public event EventHandler<DictionaryEventArgs> EventFired;
         public List<string> AvailableValues => new List<string>(){"Time"};
     }
