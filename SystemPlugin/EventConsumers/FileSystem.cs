@@ -13,8 +13,7 @@ namespace SystemPlugin.EventConsumers
 
         public void HandleEvent(object Sender, DictionaryEventArgs args)
         {
-            File.WriteAllText(@"C:\Users\dhemken\Projects\EAS\EventAggregationServiceHost\bin\Debug\Debug.txt", args.ToJson());
-            //File.WriteAllText(args.Values["FileName"].ToString(),args.Values["Contents"].ToString());
+            File.WriteAllText(args.Values["FileName"].ToString(),args.Values["Contents"].ToString());
 
         }
 
