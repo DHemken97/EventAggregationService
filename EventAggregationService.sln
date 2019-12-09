@@ -1,13 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29201.188
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.852
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventAggregationServiceHost", "EventAggregationServiceHost\EventAggregationServiceHost.csproj", "{D90DC9A3-68E3-445B-8FB6-B30E6778C40E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorePlugin", "CorePlugin\CorePlugin.csproj", "{13894CC0-94BC-4543-8A14-9B64BAE39F8A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EAS_Development_Interfaces", "EAS_Development_Interfaces\EAS_Development_Interfaces.csproj", "{40F67718-4A78-41C2-AFA1-6E4C1F71FA83}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{0B594516-A423-4D2B-9166-3334FC5527D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemPlugin", "SystemPlugin\SystemPlugin.csproj", "{CBF38ECD-0256-4EBB-8F55-CBA0F33CCCDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServerPlugin", "WebServerPlugin\WebServerPlugin.csproj", "{EA8EB790-4100-41E8-B171-A386B975BC0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,9 +33,21 @@ Global
 		{40F67718-4A78-41C2-AFA1-6E4C1F71FA83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40F67718-4A78-41C2-AFA1-6E4C1F71FA83}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40F67718-4A78-41C2-AFA1-6E4C1F71FA83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBF38ECD-0256-4EBB-8F55-CBA0F33CCCDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBF38ECD-0256-4EBB-8F55-CBA0F33CCCDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBF38ECD-0256-4EBB-8F55-CBA0F33CCCDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBF38ECD-0256-4EBB-8F55-CBA0F33CCCDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA8EB790-4100-41E8-B171-A386B975BC0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA8EB790-4100-41E8-B171-A386B975BC0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA8EB790-4100-41E8-B171-A386B975BC0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA8EB790-4100-41E8-B171-A386B975BC0E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CBF38ECD-0256-4EBB-8F55-CBA0F33CCCDE} = {0B594516-A423-4D2B-9166-3334FC5527D0}
+		{EA8EB790-4100-41E8-B171-A386B975BC0E} = {0B594516-A423-4D2B-9166-3334FC5527D0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {793D8073-DCAB-485D-84EB-43009AA25161}

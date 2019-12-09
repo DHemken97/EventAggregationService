@@ -1,6 +1,10 @@
-﻿namespace EAS_Development_Interfaces
+﻿using System;
+
+namespace EAS_Development_Interfaces
 {
     public interface IConsumerArgument
     {
+
+    
     }
 }

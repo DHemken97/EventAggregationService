@@ -44,6 +44,7 @@ namespace EventAggregationServiceHost
         protected override void OnStop()
         {
             Configuration.Services.ForEach(service => service.Stop());
+            Configuration.Bindings.ForEach(binding => File.WriteAllText($@"{BaseDirectory}\Bindings\{binding.Source}_{binding.Target}.json",binding.ToJson()));
         }
         private void LoadBootstrappers()
         {
@@ -58,6 +59,25 @@ namespace EventAggregationServiceHost
                 .Where(file => file.ToLower()
                     .EndsWith(".dll"))
                 .ToList();
+            //var dirs = Directory.GetDirectories($@"{BaseDirectory}\Plugins");
+
+            //foreach (var dir in dirs)
+            //{
+            //    var dirFiles = Directory
+            //        .GetFiles(dir)
+            //        .Where(file => file.ToLower()
+            //            .EndsWith(".dll"))
+            //        .ToList();
+            //    var name = dir.Substring(dir.LastIndexOf("\\")+1);
+                
+            //    var path = $"{dir}\\{name}.dll";
+            //    if (!dirFiles.Contains(path))
+            //        throw new Exception($"Unable To Find {path}");
+            //    dirFiles.Remove(path);
+            //    dirFiles.Select(Assembly.LoadFile);
+            //    files.Add(path);
+            //}
+
 
             Configuration.Assemblies = files.Select(Assembly.LoadFile).ToList();
         }
@@ -80,7 +100,32 @@ namespace EventAggregationServiceHost
         }
         private void CreateBindings()
         {
+            Configuration.Bindings = new List<Binding>();
+            var files = Directory
+                .GetFiles($@"{BaseDirectory}\Bindings")
+                .Where(file => file.ToLower()
+                    .EndsWith(".json"))
+                .ToList();
+            files.ForEach(file => Configuration.Bindings.Add(File.ReadAllText(file).FromJson<Binding>()));
+            //TestBinding();
+            var result = Configuration.Bindings.All(b => b.Bind());
+            if (!result) File.WriteAllText($@"{BaseDirectory}\BindingErrors.txt", "Failed To Bind one or more items");
+            else File.WriteAllText($@"{BaseDirectory}\BindingErrors.txt", "No Errors");
+        }
 
+        private void TestBinding()
+        {
+            var binding = new Binding()
+            {
+                Source = Configuration.EventSources.First().Name,
+                Target = Configuration.EventConsumers.First().Name,
+                Mappings = new Dictionary<string, string>()
+                {
+                    {"FileName",@"C:\Users\dhemken\Projects\EAS\EventAggregationServiceHost\bin\Debug\Test.txt" },
+                    {"Contents","It Is {Time}" }
+                }
+            };
+            Configuration.Bindings.Add(binding);
         }
         private List<TType> GetClassesOfType<TType>()
         {
@@ -89,7 +134,6 @@ namespace EventAggregationServiceHost
                 .SelectMany(assembly => assembly.GetTypes().Where(type => typeof(TType).IsAssignableFrom(type)))
                 .Select(c => (TType)Activator.CreateInstance(c))
                 .ToList();
-
         }
     }
 }

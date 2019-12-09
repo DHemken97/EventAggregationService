@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace EAS_Development_Interfaces
 {
@@ -6,11 +7,7 @@ namespace EAS_Development_Interfaces
     {
         string Name { get; }
         string Description { get; }
-        void HandleEvent(object Sender, EventArgs args);
-
-    }
-    public interface IEventConsumer<TConsumerArgument> where TConsumerArgument: EventArgs, IConsumerArgument
-    {
-        void HandleEvent(object Sender, TConsumerArgument arguments);
+        void HandleEvent(object Sender, DictionaryEventArgs args);
+        List<string> RequiredValues { get; }
     }
 }

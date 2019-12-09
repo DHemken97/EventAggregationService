@@ -1,4 +1,7 @@
-﻿using System.ServiceProcess;
+﻿using System;
+using System.IO;
+using System.Runtime.ExceptionServices;
+using System.ServiceProcess;
 
 namespace EventAggregationServiceHost
 {
@@ -16,8 +19,5 @@ namespace EventAggregationServiceHost
             };
             ServiceBase.Run(ServicesToRun);
         }
-
-
-
     }
 }

@@ -4,14 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{13894CC0-94BC-4543-8A14-9B64BAE39F8A}</ProjectGuid>
+    <ProjectGuid>{CBF38ECD-0256-4EBB-8F55-CBA0F33CCCDE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CorePlugin</RootNamespace>
-    <AssemblyName>CorePlugin</AssemblyName>
+    <RootNamespace>SystemPlugin</RootNamespace>
+    <AssemblyName>SystemPlugin</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,15 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\Dump_Config.cs" />
-    <Compile Include="Commands\Execute.cs" />
-    <Compile Include="Commands\Listen.cs" />
-    <Compile Include="Commands\Shutdown.cs" />
-    <Compile Include="Commands\Help.cs" />
+    <Compile Include="EventConsumers\FileSystem.cs" />
+    <Compile Include="EventSources\DateTime.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\TelnetServer.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\EAS_Development_Interfaces\EAS_Development_Interfaces.csproj">
       <Project>{40F67718-4A78-41C2-AFA1-6E4C1F71FA83}</Project>
