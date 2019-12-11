@@ -13,11 +13,11 @@ namespace CorePlugin.Commands
         
         public string Execute(IEnumerable<string> parameters = null)
         {
-            var c = Configuration.Commands;
+            var commands = Configuration.Commands;
             var result = string.Empty;
-            foreach (var plugin in c)
+            foreach (var command in commands)
             {
-                result += $"{plugin.Name}  -  {plugin.Description}\r\n";
+                result += $"{command.Name}  -  {command.Description}\r\n";
             }
             return result;
         }
