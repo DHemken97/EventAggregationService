@@ -1,27 +1,33 @@
 ﻿using EAS_Development_Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using CorePlugin.Models;
 
 namespace CorePlugin.Services
 {
     public class TelnetServer : IService
     {
+        public static List<Client> Clients { get; private set; }
         public void Start()
         {
-            RunServer();
+            Clients = new List<Client>();
+            for (var port = 9090; port <= 9091; port++)
+            {
+                RunServer(port);
+            }
         }
 
         private TcpListener _server;
-        private async void RunServer()
+        private async void RunServer(int port)
         {
             string data;
             try
             {
-                var port = 9090;
                 var localAddr = IPAddress.Parse("127.0.0.1");
 
                 _server = new TcpListener(localAddr, port);
@@ -36,7 +42,8 @@ namespace CorePlugin.Services
                     {
 
                         var client = _server.AcceptTcpClient();
-
+                        var listEntry = new Client(client);
+                        Clients.Add(listEntry);
                         var stream = client.GetStream();
 
                         int i;
@@ -46,14 +53,14 @@ namespace CorePlugin.Services
                             data = Encoding.ASCII.GetString(bytes, 0, i);
 
 
-                            var reply = HandleCommand(data);
-
+                            var reply = HandleCommand(listEntry,data);
                             var msg = Encoding.ASCII.GetBytes(reply);
 
                             stream.Write(msg, 0, msg.Length);
                         }
 
                         client.Close();
+                        Clients.Remove(listEntry);
                     }
 
                 });
@@ -62,6 +69,7 @@ namespace CorePlugin.Services
             catch (SocketException e)
             {
                 Console.WriteLine("SocketException: {0}", e);
+                throw;
             }
             finally
             {
@@ -70,9 +78,12 @@ namespace CorePlugin.Services
 
 
         }
-        string HandleCommand(string command)
+        string HandleCommand(Client client,string command)
         {
             if (string.IsNullOrWhiteSpace(command)) return string.Empty;
+            Clients.Remove(client);
+            client.UpdateCommandStats(command);
+            Clients.Add(client);
             var splitCommand = command.Split(' ');
             var arguments = splitCommand.ToList();
             arguments.RemoveAt(0);
