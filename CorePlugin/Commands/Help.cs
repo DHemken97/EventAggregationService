@@ -17,7 +17,11 @@ namespace CorePlugin.Commands
             var commands = Configuration.Commands;
             var searchValue = parameters?.Arguments.FirstOrDefault();
             var result = string.Empty;
-            foreach (var command in commands.Where(cmd => string.IsNullOrWhiteSpace(searchValue) || cmd.Name.Contains(searchValue)))
+            foreach (var command in commands.Where(cmd => 
+            string.IsNullOrWhiteSpace(searchValue) || 
+            cmd.Name.Contains(searchValue) || 
+            cmd.Description.Contains(searchValue)
+            ))
             {
                 result += $"{command.Name}  -  {command.Description}\r\n";
             }
