@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace EAS_Development_Interfaces
 {
-    
+
     public class Binding
     {
         public string Source { get; set; }

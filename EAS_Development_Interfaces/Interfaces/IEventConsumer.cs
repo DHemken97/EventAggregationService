@@ -2,10 +2,11 @@
 
 namespace EAS_Development_Interfaces
 {
-    public interface ICommand
+    public interface IEventConsumer
     {
         string Name { get; }
         string Description { get; }
-        string Execute(IEnumerable<string> parameters);
+        void HandleEvent(object Sender, DictionaryEventArgs args);
+        List<string> RequiredValues { get; }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Runtime.ExceptionServices;
-using System.ServiceProcess;
+﻿using System.ServiceProcess;
 
 namespace EventAggregationServiceHost
 {

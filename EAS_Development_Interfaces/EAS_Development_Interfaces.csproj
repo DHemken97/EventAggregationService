@@ -44,16 +44,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Binding.cs" />
-    <Compile Include="Configuration.cs" />
-    <Compile Include="DictionaryEventArgs.cs" />
-    <Compile Include="IBootstrapper.cs" />
-    <Compile Include="ICommand.cs" />
-    <Compile Include="IConsumerArgument.cs" />
-    <Compile Include="IEventConsumer.cs" />
-    <Compile Include="IEventSource.cs" />
-    <Compile Include="IService.cs" />
-    <Compile Include="JsonExtensions.cs" />
+    <Compile Include="Helpers\CommandFormatter.cs" />
+    <Compile Include="Models\Binding.cs" />
+    <Compile Include="Models\CommandElements.cs" />
+    <Compile Include="Models\Configuration.cs" />
+    <Compile Include="Models\DictionaryEventArgs.cs" />
+    <Compile Include="Interfaces\IBootstrapper.cs" />
+    <Compile Include="Interfaces\ICommand.cs" />
+    <Compile Include="Interfaces\IConsumerArgument.cs" />
+    <Compile Include="Interfaces\IEventConsumer.cs" />
+    <Compile Include="Interfaces\IEventSource.cs" />
+    <Compile Include="Interfaces\IService.cs" />
+    <Compile Include="Helpers\JsonExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EAS_Development_Interfaces;
+using EAS_Development_Interfaces.Models;
 
 namespace CorePlugin.Commands
 {
@@ -11,23 +9,21 @@ namespace CorePlugin.Commands
     {
         public string Name { get=> "Execute"; }
         public string Description { get=> "Runs an event consumer method"; }
-        public string Execute(IEnumerable<string> parameters)
+        public string Execute(CommandElements parameters)
         {
-            var name = parameters.FirstOrDefault();
+            var name = parameters?.Arguments.FirstOrDefault();
             var consumer = Configuration.EventConsumers.FirstOrDefault(c => c.Name.ToLower() == name.ToLower());
             if (consumer == null) return $"Unknown Consumer \"{name}\"";
 
-            var arguments = parameters.ToList();
-            arguments.RemoveAt(0);
+            var arguments = parameters.Arguments.ToList();
             
-            var KeyValues = arguments.Select(p => p.Split(':'));
             var d = new Dictionary<string,object>();
-            foreach (var keyValuePair in KeyValues)
+            foreach (var keyValuePair in parameters.DoubleFlags)                
             {
                 var correctedName =
-                    consumer.RequiredValues.FirstOrDefault(c => c.ToLower() == keyValuePair[0].ToLower());
-                if (string.IsNullOrWhiteSpace(correctedName)) return $"Unknown Parameter {keyValuePair[0]}";
-                d.Add(correctedName, keyValuePair[1]);
+                    consumer.RequiredValues.FirstOrDefault(c => c.ToLower() == keyValuePair.Key.ToLower());
+                if (string.IsNullOrWhiteSpace(correctedName)) return $"Unknown Parameter {keyValuePair.Key}";
+                d.Add(correctedName, keyValuePair.Value);
             }
 
             if (!consumer.RequiredValues.All(k => d.ContainsKey(k)))

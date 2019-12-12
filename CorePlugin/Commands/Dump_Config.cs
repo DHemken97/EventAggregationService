@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EAS_Development_Interfaces;
+﻿using EAS_Development_Interfaces;
+using EAS_Development_Interfaces.Models;
 
 namespace CorePlugin.Commands
 {
@@ -11,7 +7,7 @@ namespace CorePlugin.Commands
     {
         public string Name { get=>"Dump_Config"; }
         public string Description { get=> "Lists All Values in running config"; }
-        public string Execute(IEnumerable<string> parameters)
+        public string Execute(CommandElements parameters)
         {  return 
             ListAssemblies()+
             ListBootstrappers()+

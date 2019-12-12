@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EAS_Development_Interfaces;
+using EAS_Development_Interfaces.Models;
 
 namespace CorePlugin.Commands
 {
@@ -11,10 +9,10 @@ namespace CorePlugin.Commands
     {
         public string Name { get=>"Listen"; }
         public string Description { get=>"Listens for a given trigger"; }
-        public string Execute(IEnumerable<string> parameters)
+        public string Execute(CommandElements parameters)
         {
             result = null;
-            var name = parameters.FirstOrDefault()??string.Empty;
+            var name = parameters.Arguments.FirstOrDefault()??string.Empty;
             var source = Configuration.EventSources.FirstOrDefault(e => e.Name == name);
             if (source == null) return $"Unable to locate Source \"{name}\"";
             source.EventFired += HandleFire;
