@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using CorePlugin.Models;
+using EAS_Development_Interfaces.Helpers;
 
 namespace CorePlugin.Services
 {
@@ -84,11 +85,9 @@ namespace CorePlugin.Services
             Clients.Remove(client);
             client.UpdateCommandStats(command);
             Clients.Add(client);
-            var splitCommand = command.Split(' ');
-            var arguments = splitCommand.ToList();
-            arguments.RemoveAt(0);
-            var c = Configuration.Commands.FirstOrDefault(cmd => cmd.Name.ToLower() == splitCommand.FirstOrDefault().ToLower());
-            var result = c?.Execute(arguments) ?? Unknown();
+            var commandElements =command.BreakdownCommand();
+            var c = Configuration.Commands.FirstOrDefault(cmd => cmd.Name.ToLower() == commandElements.command.ToLower());
+            var result = c?.Execute(commandElements) ?? Unknown();
             return result;
         }
         string Unknown()

@@ -59,25 +59,6 @@ namespace EventAggregationServiceHost
                 .Where(file => file.ToLower()
                     .EndsWith(".dll"))
                 .ToList();
-            //var dirs = Directory.GetDirectories($@"{BaseDirectory}\Plugins");
-
-            //foreach (var dir in dirs)
-            //{
-            //    var dirFiles = Directory
-            //        .GetFiles(dir)
-            //        .Where(file => file.ToLower()
-            //            .EndsWith(".dll"))
-            //        .ToList();
-            //    var name = dir.Substring(dir.LastIndexOf("\\")+1);
-                
-            //    var path = $"{dir}\\{name}.dll";
-            //    if (!dirFiles.Contains(path))
-            //        throw new Exception($"Unable To Find {path}");
-            //    dirFiles.Remove(path);
-            //    dirFiles.Select(Assembly.LoadFile);
-            //    files.Add(path);
-            //}
-
 
             Configuration.Assemblies = files.Select(Assembly.LoadFile).ToList();
         }

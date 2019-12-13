@@ -59,4 +59,31 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>for /F "tokens=4" %25%25F in ('filever.exe /B /A /D $(TargetPath)') do (
+  set VERSION=%25%25F
+)
+echo The version is %25VERSION%25
+
+rem ren $(TargetPath) $(TargetDir)$(TargetName)%25VERSION%25</PostBuildEvent>
+  </PropertyGroup>
+  <Target Name="PostBuildMacros">
+    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
+      <Output TaskParameter="Assemblies" ItemName="Targets" />
+    </GetAssemblyIdentity>
+    <ItemGroup>
+      <VersionNumber Include="@(Targets->'%(Version)')" />
+    </ItemGroup>
+  </Target>
+  <PropertyGroup>
+    <PostBuildEventDependsOn>
+      $(PostBuildEventDependsOn);
+      PostBuildMacros;
+    </PostBuildEventDependsOn>
+    <PostBuildEvent>mkdir "D:\EAS Plugins\Core\@(VersionNumber)"
+copy "$(TargetPath)" "D:\EAS Plugins\Core\@(VersionNumber)"
+git add -A
+git commit -m "Build $(TargetName) Version @(VersionNumber)"
+git push</PostBuildEvent>
+  </PropertyGroup>
 </Project>
