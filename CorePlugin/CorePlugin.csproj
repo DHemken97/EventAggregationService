@@ -80,10 +80,15 @@ rem ren $(TargetPath) $(TargetDir)$(TargetName)%25VERSION%25</PostBuildEvent>
       $(PostBuildEventDependsOn);
       PostBuildMacros;
     </PostBuildEventDependsOn>
-    <PostBuildEvent>mkdir "D:\EAS Plugins\Core\@(VersionNumber)"
-copy "$(TargetPath)" "D:\EAS Plugins\Core\@(VersionNumber)"
-git add -A
-git commit -m "Build $(TargetName) Version @(VersionNumber)"
-git push</PostBuildEvent>
+    <PostBuildEvent>N:
+cd EAS_Plugins
+IF EXIST "N:\EAS_Plugins\$(ProjectName)\@(VersionNumber)\" exit
+      mkdir "N:\EAS_Plugins\$(ProjectName)\@(VersionNumber)"
+      copy "$(TargetPath)" "N:\EAS_Plugins\$(ProjectName)\@(VersionNumber)"
+
+      git add -A
+      git commit -m "Build $(TargetName) Version @(VersionNumber)"
+      git push
+</PostBuildEvent>
   </PropertyGroup>
 </Project>

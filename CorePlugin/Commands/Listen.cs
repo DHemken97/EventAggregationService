@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using EAS_Development_Interfaces;
+using EAS_Development_Interfaces.Interfaces;
 using EAS_Development_Interfaces.Models;
 
 namespace CorePlugin.Commands
@@ -9,7 +10,11 @@ namespace CorePlugin.Commands
     {
         public string Name { get=>"Listen"; }
         public string Description { get=>"Listens for a given trigger"; }
-        public string Execute(CommandElements parameters)
+        public void Execute(CommandElements parameters, IConsoleWriter console)
+        {
+            console.Write(GetResult(parameters));
+        }
+        public string GetResult(CommandElements parameters)
         {
             result = null;
             var name = parameters.Arguments.FirstOrDefault()??string.Empty;

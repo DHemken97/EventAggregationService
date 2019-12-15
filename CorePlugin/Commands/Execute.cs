@@ -1,15 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using EAS_Development_Interfaces;
+using EAS_Development_Interfaces.Interfaces;
 using EAS_Development_Interfaces.Models;
 
 namespace CorePlugin.Commands
 {
-    public class ExecuteCommand:ICommand
+    public class ExecuteCommand : ICommand
     {
         public string Name { get=> "Execute"; }
         public string Description { get=> "Runs an event consumer method"; }
-        public string Execute(CommandElements parameters)
+        public void Execute(CommandElements parameters, IConsoleWriter console)
+        {
+            console.Write(ExecuteMethod(parameters));
+        }
+        public string ExecuteMethod(CommandElements parameters)
         {
             var name = parameters?.Arguments.FirstOrDefault();
             var consumer = Configuration.EventConsumers.FirstOrDefault(c => c.Name.ToLower() == name.ToLower());
@@ -33,5 +38,7 @@ namespace CorePlugin.Commands
             consumer?.HandleEvent(this,new DictionaryEventArgs(){Values = d});
             return $"Executed Event {consumer.Name}";
         }
+
+
     }
 }

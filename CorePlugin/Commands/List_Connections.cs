@@ -4,6 +4,7 @@ using System.Net;
 using CorePlugin.Models;
 using CorePlugin.Services;
 using EAS_Development_Interfaces;
+using EAS_Development_Interfaces.Interfaces;
 using EAS_Development_Interfaces.Models;
 
 namespace CorePlugin.Commands
@@ -13,8 +14,11 @@ namespace CorePlugin.Commands
         public string Name => "List_Connections";
         public string Description => "List Active Telnet Connections";
 
-
-        public string Execute(CommandElements parameters)
+        public void Execute(CommandElements parameters, IConsoleWriter console)
+        {
+            console.Write(GetResult(parameters));
+        }
+        public string GetResult(CommandElements parameters)
         {
             var clients = TelnetServer.Clients;
             return string.Join("\r\n", clients.Select(client => $"{((IPEndPoint)client.client.RemoteEndPoint).Address}:{((IPEndPoint)client.client.RemoteEndPoint).Port} - Connection Details:{{\r\n{getDetails(client)}\r\n}}"));
