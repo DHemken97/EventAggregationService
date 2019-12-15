@@ -28,7 +28,7 @@ namespace EventAggregationServiceHost
 
         private static void FirstChanceHandler(object sender, FirstChanceExceptionEventArgs e)
         {
-            File.AppendAllText($@"C:\Users\d1108\Projects\EventAggregationService\EventAggregationServiceHost\bin\Debug\Errors\{e.Exception.GetType().Name}.txt", e.Exception.Message);
+            File.AppendAllText($@"C:\Users\d1108\Projects\EventAggregationService\EventAggregationServiceHost\bin\Debug\Errors\{e.Exception.GetType().Name}.txt", $"{e.Exception.Message}\r\n{e.Exception.StackTrace}\r\n\r\n");
         }
     }
 }

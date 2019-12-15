@@ -86,7 +86,7 @@ namespace CorePlugin.Services
             client.UpdateCommandStats(command);
             Clients.Add(client);
             var commandElements =command.BreakdownCommand();
-            var c = Configuration.Commands.FirstOrDefault(cmd => cmd.Name.ToLower() == commandElements.command.ToLower());
+            var c = Configuration.Commands?.FirstOrDefault(cmd => cmd.Name.ToLower() == commandElements.command.ToLower());
             var result = c?.Execute(commandElements) ?? Unknown();
             return result;
         }
