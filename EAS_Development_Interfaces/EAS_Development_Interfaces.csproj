@@ -45,9 +45,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\CommandFormatter.cs" />
+    <Compile Include="Interfaces\IConsoleWriter.cs" />
     <Compile Include="Models\Binding.cs" />
     <Compile Include="Models\CommandElements.cs" />
     <Compile Include="Models\Configuration.cs" />
+    <Compile Include="Models\ConsoleWriter.cs" />
     <Compile Include="Models\DictionaryEventArgs.cs" />
     <Compile Include="Interfaces\IBootstrapper.cs" />
     <Compile Include="Interfaces\ICommand.cs" />

@@ -91,7 +91,7 @@ namespace EventAggregationServiceHost
             //TestBinding();
             var result = Configuration.Bindings.All(b => b.Bind());
             if (!result) File.WriteAllText($@"{BaseDirectory}\BindingErrors.txt", "Failed To Bind one or more items");
-            else File.WriteAllText($@"{BaseDirectory}\BindingErrors.txt", "No Errors");
+          //  else File.WriteAllText($@"{BaseDirectory}\BindingErrors.txt", "No Errors");
         }
 
         private void TestBinding()

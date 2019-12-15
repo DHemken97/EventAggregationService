@@ -8,6 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using CorePlugin.Models;
 using EAS_Development_Interfaces.Helpers;
+using EAS_Development_Interfaces.Models;
+using EAS_Development_Interfaces.Interfaces;
+using System.IO;
 
 namespace CorePlugin.Services
 {
@@ -17,7 +20,7 @@ namespace CorePlugin.Services
         public void Start()
         {
             Clients = new List<Client>();
-            for (var port = 9090; port <= 9091; port++)
+            for (var port = 9070; port <= 9091; port++)
             {
                 RunServer(port);
             }
@@ -26,9 +29,12 @@ namespace CorePlugin.Services
         private TcpListener _server;
         private async void RunServer(int port)
         {
+
             string data;
             try
             {
+
+                File.AppendAllText(@"C:\Users\d1108\Projects\EventAggregationService\EventAggregationServiceHost\bin\Debug\Telnet.txt", $"Starting Telnet On Port {port}\r\n");
                 var localAddr = IPAddress.Parse("127.0.0.1");
 
                 _server = new TcpListener(localAddr, port);
@@ -49,15 +55,22 @@ namespace CorePlugin.Services
 
                         int i;
 
-                        while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+                        var result = false;
+                        while ((i = stream.Read(bytes, 0, bytes.Length)) != 0 )
                         {
                             data = Encoding.ASCII.GetString(bytes, 0, i);
 
+                            //var consoleWriter = new ConsoleWriter();
+                            //consoleWriter.OnWrite += (str, nul) =>
+                            //{
+                            //    byte[] msg = Encoding.ASCII.GetBytes((string)str);
 
-                            var reply = HandleCommand(listEntry,data);
-                            var msg = Encoding.ASCII.GetBytes(reply);
-
-                            stream.Write(msg, 0, msg.Length);
+                            //    stream.Write(msg, 0, msg.Length);
+                            //};
+                            //result = HandleCommand(listEntry,data,consoleWriter);
+                             var msg2 = Encoding.ASCII.GetBytes("MSG");
+                            
+                            stream.Write(msg2, 0, msg2.Length);
                         }
 
                         client.Close();
@@ -79,16 +92,17 @@ namespace CorePlugin.Services
 
 
         }
-        string HandleCommand(Client client,string command)
+        bool HandleCommand(Client client,string command, IConsoleWriter writer)
         {
-            if (string.IsNullOrWhiteSpace(command)) return string.Empty;
+            writer.Write(command);
+            if (string.IsNullOrWhiteSpace(command)) return true;
             Clients.Remove(client);
             client.UpdateCommandStats(command);
             Clients.Add(client);
             var commandElements =command.BreakdownCommand();
-            var c = Configuration.Commands.FirstOrDefault(cmd => cmd.Name.ToLower() == commandElements.command.ToLower());
-            var result = c?.Execute(commandElements) ?? Unknown();
-            return result;
+            var c = Configuration.Commands.FirstOrDefault(cmd => cmd.Name.ToLower() == commandElements.command.ToLower());           
+            c?.Execute(commandElements,writer);
+            return true;
         }
         string Unknown()
         {

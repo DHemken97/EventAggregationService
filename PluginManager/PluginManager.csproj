@@ -44,7 +44,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\PMGR Command.cs" />
+    <Compile Include="Internal\Manager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Bootstrappers\" />
+    <Folder Include="Event Consumers\" />
+    <Folder Include="Event Publishers\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EAS_Development_Interfaces\EAS_Development_Interfaces.csproj">
+      <Project>{40F67718-4A78-41C2-AFA1-6E4C1F71FA83}</Project>
+      <Name>EAS_Development_Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
@@ -70,17 +84,15 @@
       $(PostBuildEventDependsOn);
       PostBuildMacros;
     </PostBuildEventDependsOn>
-    <PostBuildEvent>
-IF EXIST "N:\EAS_Plugins\$(ProjectName)\@(VersionNumber)"(
-exit
-) ELSE (
+    <PostBuildEvent>N:
+cd EAS_Plugins
+IF EXIST "N:\EAS_Plugins\$(ProjectName)\@(VersionNumber)\" exit
       mkdir "N:\EAS_Plugins\$(ProjectName)\@(VersionNumber)"
       copy "$(TargetPath)" "N:\EAS_Plugins\$(ProjectName)\@(VersionNumber)"
-      n:
-cd "N:\EAS_Plugins\"
+
       git add -A
       git commit -m "Build $(TargetName) Version @(VersionNumber)"
       git push
-    )</PostBuildEvent>
+</PostBuildEvent>
   </PropertyGroup>
 </Project>

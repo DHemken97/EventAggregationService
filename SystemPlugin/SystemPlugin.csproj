@@ -53,4 +53,16 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>N:
+cd EAS_Plugins
+IF EXIST "N:\EAS_Plugins\$(ProjectName)\@(VersionNumber)\" exit
+      mkdir "N:\EAS_Plugins\$(ProjectName)\@(VersionNumber)"
+      copy "$(TargetPath)" "N:\EAS_Plugins\$(ProjectName)\@(VersionNumber)"
+
+      git add -A
+      git commit -m "Build $(TargetName) Version @(VersionNumber)"
+      git push
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>
