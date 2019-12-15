@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.852
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventAggregationServiceHost", "EventAggregationServiceHost\EventAggregationServiceHost.csproj", "{D90DC9A3-68E3-445B-8FB6-B30E6778C40E}"
 EndProject
@@ -14,6 +14,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemPlugin", "SystemPlugin\SystemPlugin.csproj", "{CBF38ECD-0256-4EBB-8F55-CBA0F33CCCDE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebhookPlugin", "WebhookPlugin\WebhookPlugin.csproj", "{D61CE587-A921-4808-B901-E6994E832A0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EAS Plugin Template", "EAS Plugin Template\EAS Plugin Template.csproj", "{4628E54C-534B-42B3-AEEA-425BDDAB32B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginManager", "PluginManager\PluginManager.csproj", "{1887973E-5670-476D-A72F-D1B5FC10351C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +45,14 @@ Global
 		{D61CE587-A921-4808-B901-E6994E832A0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D61CE587-A921-4808-B901-E6994E832A0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D61CE587-A921-4808-B901-E6994E832A0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4628E54C-534B-42B3-AEEA-425BDDAB32B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4628E54C-534B-42B3-AEEA-425BDDAB32B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4628E54C-534B-42B3-AEEA-425BDDAB32B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4628E54C-534B-42B3-AEEA-425BDDAB32B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1887973E-5670-476D-A72F-D1B5FC10351C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1887973E-5670-476D-A72F-D1B5FC10351C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1887973E-5670-476D-A72F-D1B5FC10351C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1887973E-5670-476D-A72F-D1B5FC10351C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +60,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{CBF38ECD-0256-4EBB-8F55-CBA0F33CCCDE} = {0B594516-A423-4D2B-9166-3334FC5527D0}
 		{D61CE587-A921-4808-B901-E6994E832A0E} = {0B594516-A423-4D2B-9166-3334FC5527D0}
+		{4628E54C-534B-42B3-AEEA-425BDDAB32B2} = {0B594516-A423-4D2B-9166-3334FC5527D0}
+		{1887973E-5670-476D-A72F-D1B5FC10351C} = {0B594516-A423-4D2B-9166-3334FC5527D0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {793D8073-DCAB-485D-84EB-43009AA25161}
