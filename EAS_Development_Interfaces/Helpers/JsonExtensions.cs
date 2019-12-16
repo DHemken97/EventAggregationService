@@ -5,8 +5,8 @@ namespace EAS_Development_Interfaces
 {
     public static class JsonExtensions
     {
-        public static string ToJson(this object obj)
-            => JsonConvert.SerializeObject(obj);
+        public static string ToJson(this object obj, bool Format = false)
+            => JsonConvert.SerializeObject(obj,Format? Formatting.Indented : Formatting.None);
         public static Tobj FromJson<Tobj>(this string str)
             => JsonConvert.DeserializeObject<Tobj>(str);
         

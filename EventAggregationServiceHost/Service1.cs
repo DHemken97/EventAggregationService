@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.ServiceProcess;
-
+using EAS_Development_Interfaces.Helpers;
 namespace EventAggregationServiceHost
 {
     public partial class Service1 : ServiceBase
@@ -39,6 +39,11 @@ namespace EventAggregationServiceHost
             LoadSources();
             LoadServices();
             CreateBindings();
+
+            File.AppendAllText($@"{BaseDirectory}\BootConfig.txt", JsonExtensions.ToJson(Configuration.Assemblies,true));
+            File.AppendAllText($@"{BaseDirectory}\BootConfig.txt", JsonExtensions.ToJson(Configuration.Commands, true));
+            File.AppendAllText($@"{BaseDirectory}\BootConfig.txt", JsonExtensions.ToJson(Configuration.Services, true));
+
         }
 
         protected override void OnStop()

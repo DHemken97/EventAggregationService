@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace EAS_Development_Interfaces
@@ -12,5 +13,7 @@ namespace EAS_Development_Interfaces
         public static List<IEventSource> EventSources { get; set; }
         public static List<IService> Services { get; set; }
         public static List<Binding> Bindings { get; set; }
+
+        
     }
 }
