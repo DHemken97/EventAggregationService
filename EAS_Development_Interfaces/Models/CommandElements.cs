@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EAS_Development_Interfaces.Models
@@ -7,6 +8,10 @@ namespace EAS_Development_Interfaces.Models
     {
         public CommandElements(string Command)
         {
+            DoubleFlags = new Dictionary<string, string>();
+            Flags = new List<string>();
+            Arguments = new List<string>();
+
             var isCommand = true;
             var inQuotes = false;
             var inFlag = false;
@@ -48,13 +53,7 @@ namespace EAS_Development_Interfaces.Models
                         }
                         else
                         { //end of arg
-                            if (isCommand)
-                                command = constructedValue;
-                            else if (inFlag)
-                                Flags.Add(constructedValue);
-                            else if (inDoubleFlag)
-                                DoubleFlags.Add(constructedKey, constructedValue);
-                            else Arguments.Add(constructedValue);
+                            AddValue(constructedValue,constructedKey,isCommand,inFlag,inDoubleFlag);
 
                             //reset
                             constructedValue = string.Empty;
@@ -79,11 +78,23 @@ namespace EAS_Development_Interfaces.Models
                 }
             }
 
+            AddValue(constructedValue, constructedKey, isCommand, inFlag, inDoubleFlag);
 
 
         }
 
-        public string command { get; }
+        private void AddValue(string constructedValue,string constructedKey,bool isCommand,bool inFlag,bool inDoubleFlag)
+        {
+            if (isCommand)
+                command = constructedValue;
+            else if (inFlag)
+                Flags.Add(constructedValue);
+            else if (inDoubleFlag)
+                DoubleFlags.Add(constructedKey, constructedValue);
+            else Arguments.Add(constructedValue);
+        }
+
+        public string command { get; private set; }
         public List<string> Arguments { get; }
         public List<string> Flags { get; }
         public Dictionary<string, string> DoubleFlags { get; set; }
