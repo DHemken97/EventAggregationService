@@ -32,6 +32,7 @@ namespace EAS_Development_Interfaces.Models
                         if (inFlag)
                         {
                             inDoubleFlag = true;
+                            inFlag = false;
                             inDoubleFlagKey = true;
                         }
 
@@ -85,6 +86,7 @@ namespace EAS_Development_Interfaces.Models
 
         private void AddValue(string constructedValue,string constructedKey,bool isCommand,bool inFlag,bool inDoubleFlag)
         {
+            if (string.IsNullOrWhiteSpace(constructedValue)) return;
             if (isCommand)
                 command = constructedValue;
             else if (inFlag)
