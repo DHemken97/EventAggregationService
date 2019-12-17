@@ -21,12 +21,14 @@ namespace EAS_Development_Interfaces
         public static void Clear()
         {
             Bootstrappers = new List<IBootstrapper>();
-            Assemblies = new List<Assembly>();
             Commands = new List<ICommand>();
             EventConsumers = new List<IEventConsumer>();
             EventSources = new List<IEventSource>();
+            Services.ForEach(s => s.Stop());
             Services = new List<IService>();
             Bindings = new List<Binding>();
+            Assemblies = new List<Assembly>();
+
         }
 
         public static void Load(string baseDirectory)
