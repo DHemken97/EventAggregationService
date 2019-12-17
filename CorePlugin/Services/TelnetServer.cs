@@ -15,6 +15,7 @@ namespace CorePlugin.Services
     public class TelnetServer : IService
     {
         public static List<Client> Clients { get; private set; }
+        public bool IsRunning { get; private set; }
         public void Start()
         {
             Clients = new List<Client>();
@@ -22,6 +23,8 @@ namespace CorePlugin.Services
             {
                 RunServer(port);
             }
+
+            IsRunning = true;
         }
 
         private TcpListener _server;
@@ -83,6 +86,7 @@ namespace CorePlugin.Services
             finally
             {
                 _server?.Stop();
+                IsRunning = false;
             }
 
 
@@ -108,6 +112,7 @@ namespace CorePlugin.Services
             try
             {
                 _server.Stop();
+                IsRunning = false;
 
             }
             catch (Exception e)

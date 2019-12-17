@@ -2,6 +2,7 @@
 {
     public interface IService
     {
+        bool IsRunning { get; }
         void Start();
         void Stop();
     }

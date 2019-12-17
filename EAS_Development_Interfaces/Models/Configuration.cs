@@ -46,13 +46,12 @@ namespace EAS_Development_Interfaces
 
         public static void Reload()
         {
-            Clear();
             Load(BaseDirectory);
         }
         private static void LoadBootstrappers()
         {
-            Configuration.Bootstrappers = GetClassesOfType<IBootstrapper>();
-            Configuration.Bootstrappers.ForEach(b => b.Init());
+            Bootstrappers = GetClassesOfType<IBootstrapper>();
+            Bootstrappers.ForEach(b => b.Init());
 
         }
         private static void GetAssemblies()
@@ -62,46 +61,52 @@ namespace EAS_Development_Interfaces
                 .Where(file => file.ToLower()
                     .EndsWith(".dll"))
                 .ToList();
-
-            Configuration.Assemblies = files.Select(Assembly.LoadFile).ToList();
+            var loadedFiles = Assemblies.Select(a => a.CodeBase).ToList();
+            if (!loadedFiles.Any())
+            Assemblies = files.Select(Assembly.LoadFile).ToList();
+            else
+                Assemblies.AddRange(files.Where(f => !loadedFiles.Contains(f)).Select(Assembly.LoadFile).ToList());
         }
 
 
         private static void LoadCommands()
         {
-            Configuration.Commands = GetClassesOfType<ICommand>();
+            Commands = GetClassesOfType<ICommand>();
         }
         private static void LoadConsumers()
         {
-            Configuration.EventConsumers = GetClassesOfType<IEventConsumer>();
+            EventConsumers = GetClassesOfType<IEventConsumer>();
         }
         private static void LoadSources()
         {
-            Configuration.EventSources = GetClassesOfType<IEventSource>();
+            EventSources = GetClassesOfType<IEventSource>();
         }
         private static void LoadServices()
         {
-            Configuration.Services = GetClassesOfType<IService>();
-            Configuration.Services.ForEach(s => s.Start());
+            Services = GetClassesOfType<IService>();
+            Services.ForEach(s =>
+            {
+                if (!s.IsRunning)
+                s.Start();
+            });
         }
         private static void CreateBindings()
         {
-            Configuration.Bindings = new List<Binding>();
+            Bindings = new List<Binding>();
             var files = Directory
                 .GetFiles($@"{BaseDirectory}\Bindings")
                 .Where(file => file.ToLower()
                     .EndsWith(".json"))
                 .ToList();
-            files.ForEach(file => Configuration.Bindings.Add(File.ReadAllText(file).FromJson<Binding>()));
-            var result = Configuration.Bindings.All(b => b.Bind());
+            files.ForEach(file => Bindings.Add(File.ReadAllText(file).FromJson<Binding>()));
+            var result = Bindings.All(b => b.Bind());
             if (!result) File.WriteAllText($@"{BaseDirectory}\BindingErrors.txt", "Failed To Bind one or more items");
             //  else File.WriteAllText($@"{BaseDirectory}\BindingErrors.txt", "No Errors");
         }
 
         private static List<TType> GetClassesOfType<TType>()
         {
-            return Configuration
-                .Assemblies
+            return Assemblies
                 .SelectMany(assembly => assembly.GetTypes().Where(type => typeof(TType).IsAssignableFrom(type)))
                 .Select(c => (TType)Activator.CreateInstance(c))
                 .ToList();
