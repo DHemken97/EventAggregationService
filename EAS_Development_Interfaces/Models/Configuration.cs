@@ -73,9 +73,8 @@ namespace EAS_Development_Interfaces
         }
         public static string Reload()
         {
-            //RestartService("EAS",10000);
-            return "Restart Not Supported";
-
+           Load(BaseDirectory);
+           return string.Empty;
 
         }
         private static void LoadBootstrappers()
