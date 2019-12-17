@@ -61,11 +61,9 @@ namespace EAS_Development_Interfaces
                 .Where(file => file.ToLower()
                     .EndsWith(".dll"))
                 .ToList();
-            var loadedFiles = Assemblies?.Select(a => a.CodeBase).ToList()??new List<string>();
-            if (!loadedFiles.Any())
+
             Assemblies = files.Select(Assembly.LoadFile).ToList();
-            else
-                Assemblies.AddRange(files.Where(f => !loadedFiles.Contains(f)).Select(Assembly.LoadFile).ToList());
+          
         }
 
 
