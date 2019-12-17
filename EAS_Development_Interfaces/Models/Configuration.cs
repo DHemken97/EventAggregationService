@@ -59,7 +59,7 @@ namespace EAS_Development_Interfaces
             process.StartInfo = startInfo;
             startInfo.Verb = "runas";
             process.Start();
-            return process.StandardOutput.ReadToEnd();
+            return process.StandardOutput.ReadLine();
 
         }
         private static void LoadBootstrappers()
