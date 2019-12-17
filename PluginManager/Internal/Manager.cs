@@ -3,6 +3,8 @@ using System.Linq;
 using EAS_Development_Interfaces;
 using EAS_Development_Interfaces.Interfaces;
 using EAS_Development_Interfaces.Models;
+using PluginManager.Helpers;
+using PluginManager.Models;
 
 namespace PluginManager.Internal
 {
@@ -41,6 +43,8 @@ namespace PluginManager.Internal
 
         private void ListAllPlugins()
         {
+            var plugins = HttpRequestHelper.Get<GitObject[]>("api.github.com/repos/dhemken97/plugins/contents").ToList();
+            plugins.ForEach(a => _consoleWriter.Write($"{a.name}\r\n"));
         }
     }
 }
