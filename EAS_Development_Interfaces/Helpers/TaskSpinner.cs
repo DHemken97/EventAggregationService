@@ -42,7 +42,7 @@ namespace EAS_Development_Interfaces.Helpers
                    
                 }
                 writer.Write($"\r{message}{c}");
-                System.Threading.Thread.Sleep(250);
+                System.Threading.Thread.Sleep(100);
             }
 
         }

@@ -96,18 +96,20 @@ namespace PluginManager.Internal
                 _consoleWriter.Write($"Unknown Version {version}");
                 return;
             }
-            TaskSpinner.RunTaskWithSpinner(_consoleWriter,"Downloading Source Code...",()=> {
+
+            name = plugin.name.ToLower().Replace("plugin", "");
+            TaskSpinner.RunTaskWithSpinner(_consoleWriter,$"Installing {name} Plugin...",()=> {
                 var url = tree.url;
                 var Folder = HttpRequestHelper.Get<GitTreeRoot>(url);
                 var fileDetails = HttpRequestHelper.Get<GitTreeRoot>(Folder.tree.FirstOrDefault().url);
                 var file = HttpRequestHelper.Get<GitFile>(fileDetails.url);
                 var bytes = Convert.FromBase64String(file.content);
-                File.WriteAllBytes($"{Configuration.BaseDirectory}/Plugins/{plugin.name}.dll", bytes);
+                File.WriteAllBytes($"{Configuration.BaseDirectory}/Plugins/{name}.dll", bytes);
                 Configuration.Reload();
-                var isSuccess = Configuration.Assemblies.Any(a => a.FullName.Contains(plugin.name));
+                var isSuccess = Configuration.Assemblies.Any(a => a.FullName.Contains(name));
                 var message = isSuccess ? "Success" : "Failed";
                 System.Threading.Thread.Sleep(10000);
-                _consoleWriter.Write(message);
+                _consoleWriter.Write($"\rInstalling {name} Plugin...{message}");
             });
            
 
