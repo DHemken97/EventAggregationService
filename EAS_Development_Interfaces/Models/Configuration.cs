@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.ServiceProcess;
 using System.Threading.Tasks;
 
 namespace EAS_Development_Interfaces
@@ -45,22 +46,34 @@ namespace EAS_Development_Interfaces
             CreateBindings();
 
         }
+        private static void RestartService(string serviceName, int timeoutMilliseconds)
+        {
+            ServiceController service = new ServiceController(serviceName);
+            try
+            {
+                int millisec1 = Environment.TickCount;
+                TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
 
+                service.Stop();
+                service.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+
+                // count the rest of the timeout
+                int millisec2 = Environment.TickCount;
+                timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds - (millisec2 - millisec1));
+
+                service.Start();
+                service.WaitForStatus(ServiceControllerStatus.Running, timeout);
+            }
+            catch
+            {
+                // ...
+            }
+        }
         public static string Reload()
         {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo
-            {
-                WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
-                FileName = "cmd.exe",
-                //Arguments = "net stop EAS && net Start EAS",
-                Arguments = "echo test",
-                RedirectStandardOutput = true
-            };
-            process.StartInfo = startInfo;
-            startInfo.Verb = "runas";
-            process.Start();
-            return process.StandardOutput.ReadLine();
+            RestartService("EAS",10000);
+            return "Restarted";
+
 
         }
         private static void LoadBootstrappers()
