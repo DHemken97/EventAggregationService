@@ -28,7 +28,6 @@ namespace EAS_Development_Interfaces
             Commands = new List<ICommand>();
             EventConsumers = new List<IEventConsumer>();
             EventSources = new List<IEventSource>();
-            Services?.ForEach(s => s.Stop());
             Services = new List<IService>();
             Bindings = new List<Binding>();
             Assemblies = new List<Assembly>();
@@ -114,12 +113,13 @@ namespace EAS_Development_Interfaces
         }
         private static void LoadServices()
         {
-            Services = GetClassesOfType<IService>();
-            Services.ForEach(s =>
+            var newServices = GetClassesOfType<IService>();
+            newServices.ForEach(s =>
             {
                 if (!s.IsRunning)
                 s.Start();
             });
+            Services.AddRange(newServices);
         }
         private static void CreateBindings()
         {
