@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\CommandFormatter.cs" />
+    <Compile Include="Helpers\TaskSpinner.cs" />
     <Compile Include="Interfaces\IConsoleWriter.cs" />
     <Compile Include="Models\Binding.cs" />
     <Compile Include="Models\CommandElements.cs" />

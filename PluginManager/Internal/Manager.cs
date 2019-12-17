@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using EAS_Development_Interfaces;
+using EAS_Development_Interfaces.Helpers;
 using EAS_Development_Interfaces.Interfaces;
 using EAS_Development_Interfaces.Models;
 using PluginManager.Helpers;
@@ -95,14 +96,20 @@ namespace PluginManager.Internal
                 _consoleWriter.Write($"Unknown Version {version}");
                 return;
             }
-
-            var url = tree.url;
-            var Folder = HttpRequestHelper.Get<GitTreeRoot>(url);
-            var fileDetails = HttpRequestHelper.Get<GitTreeRoot>(Folder.tree.FirstOrDefault().url);
-            var file = HttpRequestHelper.Get<GitFile>(fileDetails.url);
-            var bytes = Convert.FromBase64String(file.content);
-            File.WriteAllBytes($"{Configuration.BaseDirectory}/Plugins/{plugin.name}.dll",bytes);
-            _consoleWriter.Write(Configuration.Reload());
+            TaskSpinner.RunTaskWithSpinner(_consoleWriter,"Downloading Source Code...",()=> {
+                var url = tree.url;
+                var Folder = HttpRequestHelper.Get<GitTreeRoot>(url);
+                var fileDetails = HttpRequestHelper.Get<GitTreeRoot>(Folder.tree.FirstOrDefault().url);
+                var file = HttpRequestHelper.Get<GitFile>(fileDetails.url);
+                var bytes = Convert.FromBase64String(file.content);
+                File.WriteAllBytes($"{Configuration.BaseDirectory}/Plugins/{plugin.name}.dll", bytes);
+                Configuration.Reload();
+                var isSuccess = Configuration.Assemblies.Any(a => a.FullName.Contains(plugin.name));
+                var message = isSuccess ? "Success" : "Failed";
+                System.Threading.Thread.Sleep(10000);
+                _consoleWriter.Write(message);
+            });
+           
 
         }
     }
