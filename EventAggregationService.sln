@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29519.87
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.852
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventAggregationServiceHost", "EventAggregationServiceHost\EventAggregationServiceHost.csproj", "{D90DC9A3-68E3-445B-8FB6-B30E6778C40E}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EAS Plugin Template", "EAS Plugin Template\EAS Plugin Template.csproj", "{4628E54C-534B-42B3-AEEA-425BDDAB32B2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginManager", "PluginManager\PluginManager.csproj", "{1887973E-5670-476D-A72F-D1B5FC10351C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{74C5FCAB-7CA9-446D-8F79-A8C17DB29182}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +55,10 @@ Global
 		{1887973E-5670-476D-A72F-D1B5FC10351C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1887973E-5670-476D-A72F-D1B5FC10351C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1887973E-5670-476D-A72F-D1B5FC10351C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74C5FCAB-7CA9-446D-8F79-A8C17DB29182}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74C5FCAB-7CA9-446D-8F79-A8C17DB29182}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74C5FCAB-7CA9-446D-8F79-A8C17DB29182}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74C5FCAB-7CA9-446D-8F79-A8C17DB29182}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

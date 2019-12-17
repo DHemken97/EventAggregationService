@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using EAS_Development_Interfaces;
 using EAS_Development_Interfaces.Interfaces;
@@ -8,7 +9,7 @@ using PluginManager.Models;
 
 namespace PluginManager.Internal
 {
-    internal class Manager
+    public class Manager
     {
         private IConsoleWriter _consoleWriter;
 
@@ -41,10 +42,18 @@ namespace PluginManager.Internal
             Configuration.Assemblies.ForEach(a => _consoleWriter.Write($"{a.FullName}\r\n"));
         }
 
-        private void ListAllPlugins()
+        public void ListAllPlugins()
         {
-            var plugins = HttpRequestHelper.Get<GitObject[]>("api.github.com/repos/dhemken97/plugins/contents").ToList();
-            plugins.ForEach(a => _consoleWriter.Write($"{a.name}\r\n"));
+            try
+            {
+                var plugins = HttpRequestHelper.Get<GitObject[]>("https://api.github.com/repos/dhemken97/plugins/contents").ToList();
+                plugins.ForEach(a => _consoleWriter.Write($"{a.name}\r\n"));
+            }
+            catch (Exception e)
+            {
+                _consoleWriter.Write(e.Message);
+            }
+
         }
     }
 }
