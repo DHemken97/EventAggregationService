@@ -8,30 +8,17 @@ using System.Text;
 using System.Threading.Tasks;
 using CorePlugin.Models;
 using EAS_Development_Interfaces.Helpers;
-using EAS_Development_Interfaces.Models;
 using EAS_Development_Interfaces.Interfaces;
-using System.IO;
-using System.Reflection;
 
 namespace CorePlugin.Services
 {
     public class TelnetServer : IService
     {
-        public static string AssemblyDirectory
-        {
-            get
-            {
-                string codeBase = Assembly.GetExecutingAssembly().CodeBase;
-                UriBuilder uri = new UriBuilder(codeBase);
-                string path = Uri.UnescapeDataString(uri.Path);
-                return Path.GetDirectoryName(path);
-            }
-        }
         public static List<Client> Clients { get; private set; }
         public void Start()
         {
             Clients = new List<Client>();
-            for (var port = 9070; port <= 9091; port++)
+            for (var port = 9090; port <= 9091; port++)
             {
                 RunServer(port);
             }
@@ -40,12 +27,9 @@ namespace CorePlugin.Services
         private TcpListener _server;
         private async void RunServer(int port)
         {
-
             string data;
             try
             {
-
-                File.AppendAllText($@"{AssemblyDirectory}\Telnet.txt", $"Starting Telnet On Port {port}\r\n");
                 var localAddr = IPAddress.Parse("127.0.0.1");
 
                 _server = new TcpListener(localAddr, port);
@@ -66,22 +50,13 @@ namespace CorePlugin.Services
 
                         int i;
 
-                        var result = false;
-                        while ((i = stream.Read(bytes, 0, bytes.Length)) != 0 )
+                        while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
                         {
                             data = Encoding.ASCII.GetString(bytes, 0, i);
+                            var writer = new TelnetWriter(client);
 
-                            //var consoleWriter = new ConsoleWriter();
-                            //consoleWriter.OnWrite += (str, nul) =>
-                            //{
-                            //    byte[] msg = Encoding.ASCII.GetBytes((string)str);
-
-                            //    stream.Write(msg, 0, msg.Length);
-                            //};
-                            //result = HandleCommand(listEntry,data,consoleWriter);
-                             var msg2 = Encoding.ASCII.GetBytes("MSG");
+                            HandleCommand(listEntry, data,writer);
                             
-                            stream.Write(msg2, 0, msg2.Length);
                         }
 
                         client.Close();
@@ -103,17 +78,17 @@ namespace CorePlugin.Services
 
 
         }
-        bool HandleCommand(Client client,string command, IConsoleWriter writer)
+        void HandleCommand(Client client, string command,IConsoleWriter writer)
         {
-            writer.Write(command);
-            if (string.IsNullOrWhiteSpace(command)) return true;
+            if (string.IsNullOrWhiteSpace(command)) return;
             Clients.Remove(client);
             client.UpdateCommandStats(command);
             Clients.Add(client);
-            var commandElements =command.BreakdownCommand();
-            var c = Configuration.Commands.FirstOrDefault(cmd => cmd.Name.ToLower() == commandElements.command.ToLower());           
-            c?.Execute(commandElements,writer);
-            return true;
+            var commandElements = command.BreakdownCommand();
+            var c = Configuration.Commands?.FirstOrDefault(cmd => cmd?.Name?.ToLower() == commandElements?.command?.ToLower());
+
+            if (c != null) c.Execute(commandElements, writer);
+            else writer.Write(Unknown());
         }
         string Unknown()
         {
