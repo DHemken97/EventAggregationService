@@ -13,7 +13,7 @@ namespace EAS_Development_Interfaces
     {
         public static List<IBootstrapper> Bootstrappers { get; set; }
         public static List<AppDomain> Domains { get; set; }
-        private static List<Assembly> newAssemblies { get; set; }
+        private static List<AppDomain> newDomains { get; set; }
         public static List<ICommand> Commands { get; set; }
         public static List<IEventConsumer> EventConsumers { get; set; }
         public static List<IEventSource> EventSources { get; set; }
@@ -45,8 +45,8 @@ namespace EAS_Development_Interfaces
             LoadSources();
             LoadServices();
             CreateBindings();
-            Domains.AddRange(newAssemblies.Select(GetDomain));
-            newAssemblies = new List<Assembly>();
+            Domains.AddRange(newDomains);
+            newDomains = new List<AppDomain>();
         }
         public static void Unload(string domainName)
         {
@@ -62,10 +62,10 @@ namespace EAS_Development_Interfaces
           GC.Collect();
         }
 
-        private static AppDomain GetDomain(Assembly arg)
+        private static AppDomain GetDomain(string path)
         {
-            AppDomain dom = AppDomain.CreateDomain(arg.FullName);
-            dom.Load(arg.GetName());
+            AppDomain dom = AppDomain.CreateDomain(Path.GetFileNameWithoutExtension(path));
+            dom.Load(path);
             return dom;
         }
 
@@ -91,8 +91,8 @@ namespace EAS_Development_Interfaces
                     .EndsWith(".dll"))
                 .ToList();
 
-            newAssemblies = files.Select(Assembly.LoadFile).ToList();
-            Domains.ForEach(a => newAssemblies.Remove(a.GetAssemblies().FirstOrDefault()));
+            newDomains = files.Select(GetDomain).ToList();
+            Domains.ForEach(a => newDomains.Remove(a));
           
         }
 
@@ -134,7 +134,7 @@ namespace EAS_Development_Interfaces
 
         private static List<TType> GetClassesOfType<TType>()
         {
-            return newAssemblies
+            return newDomains.Select(d => d.GetAssemblies().FirstOrDefault())
                 .SelectMany(assembly => assembly.GetTypes().Where(type => typeof(TType).IsAssignableFrom(type)))
                 .Select(c => (TType)Activator.CreateInstance(c))
                 .ToList();
