@@ -47,29 +47,7 @@ namespace EAS_Development_Interfaces
             Assemblies = newAssemblies;
             newAssemblies = new List<Assembly>();
         }
-        private static void RestartService(string serviceName, int timeoutMilliseconds)
-        {
-            ServiceController service = new ServiceController(serviceName);
-            try
-            {
-                int millisec1 = Environment.TickCount;
-                TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
 
-                service.Stop();
-                service.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
-
-                // count the rest of the timeout
-                int millisec2 = Environment.TickCount;
-                timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds - (millisec2 - millisec1));
-
-                service.Start();
-                service.WaitForStatus(ServiceControllerStatus.Running, timeout);
-            }
-            catch
-            {
-                // ...
-            }
-        }
         public static string Reload()
         {
            Load(BaseDirectory);
@@ -85,16 +63,15 @@ namespace EAS_Development_Interfaces
         private static void GetAssemblies()
         {
 
-            var existingFiles = Assemblies?.Select(a => System.Reflection.Assembly.GetAssembly(a.GetType()).Location)??new List<string>();
 
             var files = Directory
                 .GetFiles($@"{BaseDirectory}\Plugins")
                 .Where(file => file.ToLower()
                     .EndsWith(".dll"))
-                .Where(f => !existingFiles.Contains(f))
                 .ToList();
 
             newAssemblies = files.Select(Assembly.LoadFile).ToList();
+            Assemblies.ForEach(a => newAssemblies.Remove(a));
           
         }
 
@@ -116,7 +93,6 @@ namespace EAS_Development_Interfaces
             var newServices = GetClassesOfType<IService>();
             newServices.ForEach(s =>
             {
-                if (!s.IsRunning)
                 s.Start();
             });
             Services.AddRange(newServices);
