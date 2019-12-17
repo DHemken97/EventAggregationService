@@ -25,7 +25,24 @@ namespace EAS_Development_Interfaces.Helpers
 
             while (IsRunning)
             {
-                writer.Write($"\r{message}{DateTime.Now.Second}");
+                switch (c)
+                {
+                    case '/':
+                        c = '-';
+                        break;
+                    case '-':
+                        c = '\\';
+                        break;
+                    case '\\':
+                        c = '|';
+                        break;
+                    case '|':
+                        c = '/';
+                        break;
+                   
+                }
+                writer.Write($"\r{message}{c}");
+                System.Threading.Thread.Sleep(250);
             }
 
         }
