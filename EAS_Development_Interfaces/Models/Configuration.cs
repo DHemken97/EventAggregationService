@@ -65,7 +65,7 @@ namespace EAS_Development_Interfaces
         private static AppDomain GetDomain(string path)
         {
             AppDomain dom = AppDomain.CreateDomain(Path.GetFileNameWithoutExtension(path));
-            dom.Load(path);
+            dom.Load(File.ReadAllBytes(path));
             return dom;
         }
 
