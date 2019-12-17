@@ -46,7 +46,7 @@ namespace EAS_Development_Interfaces
 
         }
 
-        public static void Reload()
+        public static string Reload()
         {
             System.Diagnostics.Process process = new System.Diagnostics.Process();
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo
@@ -58,6 +58,8 @@ namespace EAS_Development_Interfaces
             process.StartInfo = startInfo;
             startInfo.Verb = "runas";
             process.Start();
+            return process.StandardOutput.ReadToEnd();
+
         }
         private static void LoadBootstrappers()
         {

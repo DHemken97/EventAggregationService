@@ -16,8 +16,9 @@ namespace CorePlugin.Commands
         public void Execute(CommandElements parameters, IConsoleWriter console)
         {
             console.Write("Reloading...");
-            Configuration.Reload();
+            var result = Configuration.Reload();
             console.Write("\rReloading...Done\r\n");
+            console.Write(result);
 
         }
     }
