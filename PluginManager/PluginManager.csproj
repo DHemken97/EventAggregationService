@@ -48,7 +48,9 @@
     <Compile Include="Helpers\HttpRequestHelper.cs" />
     <Compile Include="Internal\Extensions.cs" />
     <Compile Include="Internal\Manager.cs" />
+    <Compile Include="Models\GitFile.cs" />
     <Compile Include="Models\GitObject.cs" />
+    <Compile Include="Models\GitTreeRoot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

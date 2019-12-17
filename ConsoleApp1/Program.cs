@@ -14,7 +14,7 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             var manager = new Manager();
-            var commandElements = new CommandElements("PMGR Install CorePlugin");
+            var commandElements = new CommandElements("PMGR Install Core");
             var writer = new ConsoleWriter();
             manager.HandleRequest(commandElements,writer);
             Console.ReadLine();

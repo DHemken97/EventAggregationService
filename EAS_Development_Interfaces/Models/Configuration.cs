@@ -15,7 +15,7 @@ namespace EAS_Development_Interfaces
         public static List<IEventSource> EventSources { get; set; }
         public static List<IService> Services { get; set; }
         public static List<Binding> Bindings { get; set; }
-        private static string BaseDirectory { get; set; }
+        public static string BaseDirectory { get; private set; }
 
 
         public static void Clear()

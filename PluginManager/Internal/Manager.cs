@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using EAS_Development_Interfaces;
 using EAS_Development_Interfaces.Interfaces;
 using EAS_Development_Interfaces.Models;
@@ -55,7 +57,7 @@ namespace PluginManager.Internal
         {
             try
             {
-                var plugins = HttpRequestHelper.Get<GitObject[]>("https://api.github.com/repos/dhemken97/plugins/contents/").ToList();
+                var plugins = GetAllPlugins();
                 plugins.ForEach(a => _consoleWriter?.Write($"{a.name}\r\n"));
             }
             catch (Exception e)
@@ -65,18 +67,42 @@ namespace PluginManager.Internal
 
         }
 
+        private List<GitObject> GetAllPlugins()
+        {
+            return HttpRequestHelper.Get<GitObject[]>("https://api.github.com/repos/dhemken97/plugins/contents/")
+                .ToList();
+
+        }
+
         public void InstallPlugin(string name, string version = null)
         {
-            var versions = HttpRequestHelper.Get<GitObject[]>($"https://api.github.com/repos/dhemken97/plugins/{name}/contents/").ToList();
-            version = version ?? versions.OrderBy(v => v).Last().name;
-            if (versions.All(v => v.name != version))
+            var plugins = GetAllPlugins();
+            var plugin = plugins.FirstOrDefault(p =>
+            {
+                var formattedName = p.name.ToLower().Replace("plugin", "");
+                return formattedName == name.ToLower();
+            });
+            if (plugin == null)
+            {
+                _consoleWriter.Write($"Unknown Plugin {name}");
+                return;
+            }
+            var versions = HttpRequestHelper.Get<GitTreeRoot>($"https://api.github.com/repos/dhemken97/plugins/git/trees/{plugin.sha}").tree;
+            version = version ?? versions.OrderBy(v => v).Last().path;
+            var tree = versions.FirstOrDefault(t => t.path == version);
+            if (tree == null)
             {
                 _consoleWriter.Write($"Unknown Version {version}");
                 return;
             }
 
-            var url = versions.FirstOrDefault(v => v.name == version).git_url;
-            HttpRequestHelper.Get<byte[]>(url);
+            var url = tree.url;
+            var Folder = HttpRequestHelper.Get<GitTreeRoot>(url);
+            var fileDetails = HttpRequestHelper.Get<GitTreeRoot>(Folder.tree.FirstOrDefault().url);
+            var file = HttpRequestHelper.Get<GitFile>(fileDetails.url);
+            var bytes = Convert.FromBase64String(file.content);
+            File.WriteAllBytes($"{Configuration.BaseDirectory}/Plugins/{plugin.name}.dll",bytes);
+            Configuration.Reload();
 
         }
     }
