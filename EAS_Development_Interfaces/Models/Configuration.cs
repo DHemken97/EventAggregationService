@@ -46,7 +46,7 @@ namespace EAS_Development_Interfaces
 
         public static void Reload()
         {
-           // Load(BaseDirectory);
+            Load(BaseDirectory);
         }
         private static void LoadBootstrappers()
         {
