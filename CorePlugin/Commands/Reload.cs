@@ -15,7 +15,10 @@ namespace CorePlugin.Commands
         public string Description => "Reload Plugins And Bindings";
         public void Execute(CommandElements parameters, IConsoleWriter console)
         {
+            console.Write("Reloading...");
             Configuration.Reload();
+            console.Write("\rReloading...Done\r\n");
+
         }
     }
 }
