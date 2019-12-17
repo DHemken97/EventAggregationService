@@ -45,13 +45,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\PMGR Command.cs" />
+    <Compile Include="Internal\Extensions.cs" />
     <Compile Include="Internal\Manager.cs" />
+    <Compile Include="Models\GitObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Bootstrappers\" />
     <Folder Include="Event Consumers\" />
     <Folder Include="Event Publishers\" />
+    <Folder Include="Helpers\" />
     <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>

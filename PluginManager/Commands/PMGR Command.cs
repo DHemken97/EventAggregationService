@@ -13,7 +13,7 @@ namespace PluginManager.Commands
 
         public void Execute(CommandElements parameters, IConsoleWriter console)
         {
-            throw new System.NotImplementedException();
+            new Manager().HandleRequest(parameters, console);
         }
     }
 }
