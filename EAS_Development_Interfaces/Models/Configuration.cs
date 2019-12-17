@@ -53,7 +53,8 @@ namespace EAS_Development_Interfaces
             {
                 WindowStyle = System.Diagnostics.ProcessWindowStyle.Maximized,
                 FileName = "cmd.exe",
-                Arguments = "net stop EAS && net Start EAS && Pause"
+                Arguments = "net stop EAS && net Start EAS && Pause",
+                RedirectStandardOutput = true
             };
             process.StartInfo = startInfo;
             startInfo.Verb = "runas";
