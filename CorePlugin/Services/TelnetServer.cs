@@ -40,28 +40,34 @@ namespace CorePlugin.Services
 
                 await Task.Run(() =>
                 {
-                    while (true)
+                    try
                     {
-
-                        var client = _server.AcceptTcpClient();
-                        var listEntry = new Client(client);
-                        Clients.Add(listEntry);
-                        var stream = client.GetStream();
-
-                        int i;
-
-                        while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+                        while (true)
                         {
-                            data = Encoding.ASCII.GetString(bytes, 0, i);
-                            var writer = new TelnetWriter(client);
-                            HandleCommand(listEntry, data,writer);
-                            
+
+                            var client = _server.AcceptTcpClient();
+                            var listEntry = new Client(client);
+                            Clients.Add(listEntry);
+                            var stream = client.GetStream();
+
+                            int i;
+
+                            while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+                            {
+                                data = Encoding.ASCII.GetString(bytes, 0, i);
+                                var writer = new TelnetWriter(client);
+                                HandleCommand(listEntry, data, writer);
+
+                            }
+
+                            client.Close();
+                            Clients.Remove(listEntry);
                         }
-
-                        client.Close();
-                        Clients.Remove(listEntry);
                     }
-
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
                 });
 
             }
@@ -69,6 +75,10 @@ namespace CorePlugin.Services
             {
                 Console.WriteLine("SocketException: {0}", e);
                 throw;
+            }
+            catch (Exception e)
+            {
+
             }
             finally
             {
@@ -95,7 +105,15 @@ namespace CorePlugin.Services
         }
         public void Stop()
         {
-            _server.Stop();
+            try
+            {
+                _server.Stop();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
     }
 }
