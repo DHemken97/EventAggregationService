@@ -51,9 +51,9 @@ namespace EAS_Development_Interfaces
             System.Diagnostics.Process process = new System.Diagnostics.Process();
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo
             {
-                WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
+                WindowStyle = System.Diagnostics.ProcessWindowStyle.Maximized,
                 FileName = "cmd.exe",
-                Arguments = "net stop EAS && net Start EAS"
+                Arguments = "net stop EAS && net Start EAS && Pause"
             };
             process.StartInfo = startInfo;
             startInfo.Verb = "runas";
