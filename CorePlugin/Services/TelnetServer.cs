@@ -52,7 +52,6 @@ namespace CorePlugin.Services
                             var listEntry = new Client(client);
                             Clients.Add(listEntry);
                             var stream = client.GetStream();
-
                             int i;
 
                             while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
@@ -93,6 +92,10 @@ namespace CorePlugin.Services
         }
         void HandleCommand(Client client, string command,IConsoleWriter writer)
         {
+            if (client.LastCommand == null)
+            {
+                command = "help";
+            }
             if (string.IsNullOrWhiteSpace(command)) return;
             Clients.Remove(client);
             client.UpdateCommandStats(command);

@@ -104,12 +104,12 @@ namespace PluginManager.Internal
                 var fileDetails = HttpRequestHelper.Get<GitTreeRoot>(Folder.tree.FirstOrDefault().url);
                 var file = HttpRequestHelper.Get<GitFile>(fileDetails.url);
                 var bytes = Convert.FromBase64String(file.content);
-                File.WriteAllBytes($"{Configuration.BaseDirectory}/Plugins/{name}.dll", bytes);
+                File.WriteAllBytes($"{Configuration.BaseDirectory}/Plugins/{plugin.name}.dll", bytes);
                 Configuration.Reload();
-                var isSuccess = Configuration.Assemblies.Any(a => a.FullName.Contains(name));
+                var isSuccess = Configuration.Assemblies.Any(a => a.FullName.Contains(plugin.name));
                 var message = isSuccess ? "Success" : "Failed";
                 System.Threading.Thread.Sleep(10000);
-                _consoleWriter.Write($"\rInstalling {name} Plugin...{message}");
+                _consoleWriter.Write($"\rInstalling {name} Plugin...{message}\r\n");
             });
            
 
