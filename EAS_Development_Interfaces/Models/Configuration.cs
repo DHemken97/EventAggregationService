@@ -24,7 +24,7 @@ namespace EAS_Development_Interfaces
             Commands = new List<ICommand>();
             EventConsumers = new List<IEventConsumer>();
             EventSources = new List<IEventSource>();
-            Services.ForEach(s => s.Stop());
+            Services?.ForEach(s => s.Stop());
             Services = new List<IService>();
             Bindings = new List<Binding>();
             Assemblies = new List<Assembly>();

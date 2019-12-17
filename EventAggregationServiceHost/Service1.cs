@@ -32,6 +32,7 @@ namespace EventAggregationServiceHost
 
         private void Start()
         {
+            Configuration.Clear();
             Configuration.Load(BaseDirectory);
  
 
