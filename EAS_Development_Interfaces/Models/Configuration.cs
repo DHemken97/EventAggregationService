@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace EAS_Development_Interfaces
 {
@@ -46,7 +48,7 @@ namespace EAS_Development_Interfaces
 
         public static void Reload()
         {
-            Load(BaseDirectory);
+            Task.Run(() => Process.Start("CMD net stop EAS && net Start EAS"));
         }
         private static void LoadBootstrappers()
         {
