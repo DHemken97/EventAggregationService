@@ -64,6 +64,7 @@ namespace EAS_Development_Interfaces
 
         private static AppDomain GetDomain(string path)
         {
+            throw  new Exception(path);
             AppDomain dom = AppDomain.CreateDomain(Path.GetFileNameWithoutExtension(path));
             dom.Load(AssemblyName.GetAssemblyName(path));
             return dom;
