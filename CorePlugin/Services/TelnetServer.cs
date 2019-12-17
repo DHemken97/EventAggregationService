@@ -17,6 +17,16 @@ namespace CorePlugin.Services
 {
     public class TelnetServer : IService
     {
+        public static string AssemblyDirectory
+        {
+            get
+            {
+                string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+                UriBuilder uri = new UriBuilder(codeBase);
+                string path = Uri.UnescapeDataString(uri.Path);
+                return Path.GetDirectoryName(path);
+            }
+        }
         public static List<Client> Clients { get; private set; }
         public void Start()
         {
@@ -35,7 +45,7 @@ namespace CorePlugin.Services
             try
             {
 
-                File.AppendAllText($@"Telnet.txt", $"Starting Telnet On Port {port}\r\n");
+                File.AppendAllText($@"{AssemblyDirectory}\Telnet.txt", $"Starting Telnet On Port {port}\r\n");
                 var localAddr = IPAddress.Parse("127.0.0.1");
 
                 _server = new TcpListener(localAddr, port);
