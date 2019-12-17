@@ -102,7 +102,7 @@ namespace PluginManager.Internal
             var file = HttpRequestHelper.Get<GitFile>(fileDetails.url);
             var bytes = Convert.FromBase64String(file.content);
             File.WriteAllBytes($"{Configuration.BaseDirectory}/Plugins/{plugin.name}.dll",bytes);
-            Configuration.Reload();
+            _consoleWriter.Write(Configuration.Reload());
 
         }
     }

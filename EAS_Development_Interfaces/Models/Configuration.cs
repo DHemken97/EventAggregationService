@@ -13,6 +13,7 @@ namespace EAS_Development_Interfaces
     {
         public static List<IBootstrapper> Bootstrappers { get; set; }
         public static List<Assembly> Assemblies { get; set; }
+        private static List<Assembly> newAssemblies { get; set; }
         public static List<ICommand> Commands { get; set; }
         public static List<IEventConsumer> EventConsumers { get; set; }
         public static List<IEventSource> EventSources { get; set; }
@@ -44,7 +45,8 @@ namespace EAS_Development_Interfaces
             LoadSources();
             LoadServices();
             CreateBindings();
-
+            Assemblies = newAssemblies;
+            newAssemblies = new List<Assembly>();
         }
         private static void RestartService(string serviceName, int timeoutMilliseconds)
         {
@@ -84,13 +86,17 @@ namespace EAS_Development_Interfaces
         }
         private static void GetAssemblies()
         {
+
+            var existingFiles = Assemblies?.Select(a => System.Reflection.Assembly.GetAssembly(a.GetType()).Location)??new List<string>();
+
             var files = Directory
                 .GetFiles($@"{BaseDirectory}\Plugins")
                 .Where(file => file.ToLower()
                     .EndsWith(".dll"))
+                .Where(f => !existingFiles.Contains(f))
                 .ToList();
 
-            Assemblies = files.Select(Assembly.LoadFile).ToList();
+            newAssemblies = files.Select(Assembly.LoadFile).ToList();
           
         }
 
@@ -132,7 +138,7 @@ namespace EAS_Development_Interfaces
 
         private static List<TType> GetClassesOfType<TType>()
         {
-            return Assemblies
+            return newAssemblies
                 .SelectMany(assembly => assembly.GetTypes().Where(type => typeof(TType).IsAssignableFrom(type)))
                 .Select(c => (TType)Activator.CreateInstance(c))
                 .ToList();
