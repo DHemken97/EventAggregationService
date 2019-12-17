@@ -11,6 +11,7 @@ using EAS_Development_Interfaces.Helpers;
 using EAS_Development_Interfaces.Models;
 using EAS_Development_Interfaces.Interfaces;
 using System.IO;
+using System.Reflection;
 
 namespace CorePlugin.Services
 {
@@ -34,7 +35,7 @@ namespace CorePlugin.Services
             try
             {
 
-                File.AppendAllText(@"C:\Users\d1108\Projects\EventAggregationService\EventAggregationServiceHost\bin\Debug\Telnet.txt", $"Starting Telnet On Port {port}\r\n");
+                File.AppendAllText($@".\Telnet.txt", $"Starting Telnet On Port {port}\r\n");
                 var localAddr = IPAddress.Parse("127.0.0.1");
 
                 _server = new TcpListener(localAddr, port);
