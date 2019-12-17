@@ -49,11 +49,14 @@ namespace EAS_Development_Interfaces
         public static void Reload()
         {
             System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = "net stop EAS && net Start EAS";
+            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo
+            {
+                WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
+                FileName = "cmd.exe",
+                Arguments = "net stop EAS && net Start EAS"
+            };
             process.StartInfo = startInfo;
+            startInfo.Verb = "runas";
             process.Start();
         }
         private static void LoadBootstrappers()
