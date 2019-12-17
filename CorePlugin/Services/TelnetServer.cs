@@ -54,7 +54,6 @@ namespace CorePlugin.Services
                         {
                             data = Encoding.ASCII.GetString(bytes, 0, i);
                             var writer = new TelnetWriter(client);
-
                             HandleCommand(listEntry, data,writer);
                             
                         }
