@@ -11,7 +11,7 @@ namespace CorePlugin.Commands
         public string Description { get=> "Lists All Values in running config"; }
         public void Execute(CommandElements parameters, IConsoleWriter console)
         {
-            File.WriteAllText(@"C:\Users\d1108\Projects\EventAggregationService\EventAggregationServiceHost\bin\Debug\config.txt", GetValues());
+            File.WriteAllText($@"{Configuration.BaseDirectory}\config.txt", GetValues());
             console.Write(GetValues());
         }
         public string GetValues()
