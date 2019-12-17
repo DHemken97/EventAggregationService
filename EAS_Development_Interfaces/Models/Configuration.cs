@@ -71,8 +71,8 @@ namespace EAS_Development_Interfaces
         }
         public static string Reload()
         {
-            RestartService("EAS",10000);
-            return "Restarted";
+            //RestartService("EAS",10000);
+            return "Restart Not Supported";
 
 
         }
