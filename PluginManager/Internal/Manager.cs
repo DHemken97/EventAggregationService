@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using EAS_Development_Interfaces;
 using EAS_Development_Interfaces.Helpers;
@@ -38,20 +39,40 @@ namespace PluginManager.Internal
                     break;
                 case "install":
                     if (parameters.Arguments.Count > 2)
-                        InstallPlugin(parameters.Arguments[1],parameters.Arguments[2]);
+                        InstallPlugin(parameters.Arguments[1], parameters.Arguments[2]);
                     else if (parameters.Arguments.Count == 2)
-                    InstallPlugin(parameters.Arguments[1]);
+                        InstallPlugin(parameters.Arguments[1]);
                     else
-                    _consoleWriter.Write("Please Specify a plugin\r\n");
+                        _consoleWriter.Write("Please Specify a plugin\r\n");
 
                     break;
+                case "uninstall":
+                   if (parameters.Arguments.Count == 2)
+                        UninstallPlugin(parameters.Arguments[1]);
+                    else
+                        _consoleWriter.Write("Please Specify a plugin\r\n");
+
+                    break;
+
             }
+
+        }
+
+        private void UninstallPlugin(string name)
+        {
+            var domain = Configuration.Domains.FirstOrDefault(d => d.FriendlyName == name);
+            var assembly = domain.GetAssemblies().FirstOrDefault();
+            var filePath = assembly.Location;
+            Configuration.Unload(domain);
+            File.Delete(filePath);
+            _consoleWriter.Write("Plugin Deleted\r\n");
+
 
         }
 
         private void ListInstalledPlugins()
         {
-            Configuration.Assemblies.ForEach(a => _consoleWriter?.Write($"{a.FullName}\r\n"));
+            Configuration.Domains.ForEach(a => _consoleWriter?.Write($"{a.FriendlyName}\r\n"));
         }
 
         public void ListAllPlugins()
@@ -106,7 +127,7 @@ namespace PluginManager.Internal
                 var bytes = Convert.FromBase64String(file.content);
                 File.WriteAllBytes($"{Configuration.BaseDirectory}/Plugins/{plugin.name}.dll", bytes);
                 Configuration.Reload();
-                var isSuccess = Configuration.Assemblies.Any(a => a.FullName.Contains(plugin.name));
+                var isSuccess = Configuration.Domains.Any(a => a.FriendlyName.Contains(plugin.name));
                 var message = isSuccess ? "Success" : "Failed";
                 System.Threading.Thread.Sleep(10000);
                 _consoleWriter.Write($"\rInstalling {name} Plugin...{message}\r\n");

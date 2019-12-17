@@ -12,7 +12,7 @@ namespace EAS_Development_Interfaces
     public static class Configuration
     {
         public static List<IBootstrapper> Bootstrappers { get; set; }
-        public static List<Assembly> Assemblies { get; set; }
+        public static List<AppDomain> Domains { get; set; }
         private static List<Assembly> newAssemblies { get; set; }
         public static List<ICommand> Commands { get; set; }
         public static List<IEventConsumer> EventConsumers { get; set; }
@@ -30,7 +30,8 @@ namespace EAS_Development_Interfaces
             EventSources = new List<IEventSource>();
             Services = new List<IService>();
             Bindings = new List<Binding>();
-            Assemblies = new List<Assembly>();
+            Domains?.ForEach(AppDomain.Unload);
+            Domains = new List<AppDomain>();
 
         }
 
@@ -44,8 +45,28 @@ namespace EAS_Development_Interfaces
             LoadSources();
             LoadServices();
             CreateBindings();
-            Assemblies.AddRange(newAssemblies);
+            Domains.AddRange(newAssemblies.Select(GetDomain));
             newAssemblies = new List<Assembly>();
+        }
+        public static void Unload(string domainName)
+        {
+            var domain = Domains.FirstOrDefault(d => d.FriendlyName == domainName);
+            Unload(domain);
+        }
+        public static void Unload(AppDomain domain)
+        {
+          AppDomain.Unload(domain);
+          Domains.Remove(domain);
+          GC.Collect(); // collects all unused memory
+          GC.WaitForPendingFinalizers(); // wait until GC has finished its work
+          GC.Collect();
+        }
+
+        private static AppDomain GetDomain(Assembly arg)
+        {
+            AppDomain dom = AppDomain.CreateDomain(arg.FullName);
+            dom.Load(arg.GetName());
+            return dom;
         }
 
         public static string Reload()
@@ -71,7 +92,7 @@ namespace EAS_Development_Interfaces
                 .ToList();
 
             newAssemblies = files.Select(Assembly.LoadFile).ToList();
-            Assemblies.ForEach(a => newAssemblies.Remove(a));
+            Domains.ForEach(a => newAssemblies.Remove(a.GetAssemblies().FirstOrDefault()));
           
         }
 

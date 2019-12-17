@@ -40,10 +40,10 @@ namespace CorePlugin.Commands
 
         private string ListAssemblies()
         {
-            string result = $"Loaded {Configuration.Assemblies.Count} Assemblies\r\n";
-            foreach (var assembly in Configuration.Assemblies)
+            string result = $"Loaded {Configuration.Domains.Count} Assemblies\r\n";
+            foreach (var assembly in Configuration.Domains)
             {
-                result += $"{assembly.FullName}\r\n";
+                result += $"{assembly.FriendlyName}\r\n";
             }
 
             return result;
