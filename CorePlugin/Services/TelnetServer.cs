@@ -35,7 +35,7 @@ namespace CorePlugin.Services
             try
             {
 
-                File.AppendAllText($@".\Telnet.txt", $"Starting Telnet On Port {port}\r\n");
+                File.AppendAllText($@"Telnet.txt", $"Starting Telnet On Port {port}\r\n");
                 var localAddr = IPAddress.Parse("127.0.0.1");
 
                 _server = new TcpListener(localAddr, port);
