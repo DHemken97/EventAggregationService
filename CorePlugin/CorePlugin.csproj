@@ -45,6 +45,7 @@
     <Compile Include="Commands\Execute.cs" />
     <Compile Include="Commands\List_Connections.cs" />
     <Compile Include="Commands\Listen.cs" />
+    <Compile Include="Commands\Reload.cs" />
     <Compile Include="Commands\Shutdown.cs" />
     <Compile Include="Commands\Help.cs" />
     <Compile Include="Models\Client.cs" />

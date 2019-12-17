@@ -15,7 +15,7 @@ namespace PluginManager.Models
         public string url { get; set; }
         public string html_url { get; set; }
         public string git_url { get; set; }
-        public object download_url { get; set; }
+        public string download_url { get; set; }
         public string type { get; set; }
         public Links _links { get; set; }
     }
