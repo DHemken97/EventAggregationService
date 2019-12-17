@@ -44,7 +44,7 @@ namespace EAS_Development_Interfaces
             LoadSources();
             LoadServices();
             CreateBindings();
-            Assemblies = newAssemblies;
+            Assemblies.AddRange(newAssemblies);
             newAssemblies = new List<Assembly>();
         }
 
