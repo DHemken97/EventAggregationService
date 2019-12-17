@@ -92,7 +92,7 @@ namespace CorePlugin.Services
         }
         void HandleCommand(Client client, string command,IConsoleWriter writer)
         {
-            if (client.LastCommand == null)
+            if (string.IsNullOrWhiteSpace(client.LastCommand))
             {
                 command = "help";
             }
