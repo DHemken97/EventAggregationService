@@ -62,13 +62,15 @@ namespace EAS_Development_Interfaces
             GC.Collect();
         }
 
-        private static AppDomain GetDomain(string pluginPath)
+        private static AppDomain GetDomain(string path)
         {
-            AppDomainSetup tcpSimplexAppDomainSetup = new AppDomainSetup() { ApplicationBase = Path.GetDirectoryName(pluginPath) };
-            var _appDomain = AppDomain.CreateDomain("RecreateClientConnectionTests_Server", null, tcpSimplexAppDomainSetup);
-       
-            _appDomain.Load(Assembly.LoadFrom(pluginPath).GetName());
-            return _appDomain;
+            var _appDomain = AppDomain.CreateDomain(Path.GetFileNameWithoutExtension(path));
+
+
+
+                _appDomain.Load(AssemblyName.GetAssemblyName(path));
+                return _appDomain;
+
         }
 
         public static string Reload()
@@ -88,7 +90,9 @@ namespace EAS_Development_Interfaces
 
 
             var files = Directory
-                .GetFiles($@"{BaseDirectory}\Plugins","*.dll")
+                .GetFiles($@"{BaseDirectory}\Plugins")
+                .Where(file => file.ToLower()
+                    .EndsWith(".dll"))
                 .ToList();
 
             newDomains = files.Select(GetDomain).ToList();
