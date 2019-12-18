@@ -55,27 +55,25 @@ namespace EAS_Development_Interfaces
         }
         public static void Unload(AppDomain domain)
         {
-          AppDomain.Unload(domain);
-          Domains.Remove(domain);
-          GC.Collect(); // collects all unused memory
-          GC.WaitForPendingFinalizers(); // wait until GC has finished its work
-          GC.Collect();
+            AppDomain.Unload(domain);
+            Domains.Remove(domain);
+            GC.Collect(); // collects all unused memory
+            GC.WaitForPendingFinalizers(); // wait until GC has finished its work
+            GC.Collect();
         }
 
         private static AppDomain GetDomain(string path)
         {
-            var a = Assembly.LoadFile(path);
-            AppDomain dom = AppDomain.CreateDomain(a.FullName);
-            
-            dom.Load(a.GetName());
-            //AppDomain.CreateDomain()
-            return dom;
+            var _appDomain = AppDomain.CreateDomain(Path.GetFileNameWithoutExtension(path));
+
+                _appDomain.Load(AssemblyName.GetAssemblyName(path));
+                return _appDomain;
         }
 
         public static string Reload()
         {
-           Load(BaseDirectory);
-           return string.Empty;
+            Load(BaseDirectory);
+            return string.Empty;
 
         }
         private static void LoadBootstrappers()
@@ -96,7 +94,7 @@ namespace EAS_Development_Interfaces
 
             newDomains = files.Select(GetDomain).ToList();
             Domains.ForEach(a => newDomains.Remove(a));
-          
+
         }
 
 
