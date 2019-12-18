@@ -66,8 +66,8 @@ namespace EAS_Development_Interfaces
         {
             var _appDomain = AppDomain.CreateDomain(Path.GetFileNameWithoutExtension(pluginPath));
 
-            var assembly = _appDomain.Load(AssemblyName.GetAssemblyName(pluginPath));
-            _appDomain.SetData("FriendlyName",assembly.GetName().Name);
+            //var assembly = _appDomain.Load(AssemblyName.GetAssemblyName(pluginPath));
+            //_appDomain.SetData("FriendlyName",assembly.GetName().Name);
                 return _appDomain;
         }
 
