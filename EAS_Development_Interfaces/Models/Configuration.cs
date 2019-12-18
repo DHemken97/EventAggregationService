@@ -72,7 +72,7 @@ namespace EAS_Development_Interfaces
             GC.WaitForPendingFinalizers(); // wait until GC has finished its work
             GC.Collect();
             
-            // File.Delete(filePath);
+             File.Delete(filePath);
         }
 
         private static AppDomain GetDomain(string path)
