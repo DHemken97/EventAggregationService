@@ -112,7 +112,8 @@ namespace EAS_Development_Interfaces
                 .ToList();
 
             newDomains = files.Select(GetDomain).ToList();
-            Domains.ForEach(a => newDomains.Remove(a));
+            var existingDomains = newDomains.Where(d => Domains.Any(ed => ed.FriendlyName == d.FriendlyName)).ToList();
+            existingDomains.ForEach(a => newDomains.Remove(a));
 
         }
 

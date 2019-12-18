@@ -61,8 +61,8 @@ namespace PluginManager.Internal
         private void UninstallPlugin(string name)
         {
             var domain = Configuration.Domains.FirstOrDefault(d => d.FriendlyName == name);
-            var assembly = domain.GetAssemblies().FirstOrDefault();
-            var filePath = assembly.Location;
+            var assembly = domain.GetAssemblies()[1];
+            var filePath = $"{Configuration.BaseDirectory}\\Plugins\\{name}.dll";
             Configuration.Unload(domain);
             File.Delete(filePath);
             _consoleWriter.Write("Plugin Deleted\r\n");
