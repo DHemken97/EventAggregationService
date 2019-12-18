@@ -62,11 +62,12 @@ namespace EAS_Development_Interfaces
             GC.Collect();
         }
 
-        private static AppDomain GetDomain(string path)
+        private static AppDomain GetDomain(string pluginPath)
         {
-            var _appDomain = AppDomain.CreateDomain(Path.GetFileNameWithoutExtension(path));
+            var _appDomain = AppDomain.CreateDomain(Path.GetFileNameWithoutExtension(pluginPath));
 
-                _appDomain.Load(AssemblyName.GetAssemblyName(path));
+            var assembly = _appDomain.Load(AssemblyName.GetAssemblyName(pluginPath));
+            _appDomain.SetData("FriendlyName",assembly.GetName().Name);
                 return _appDomain;
         }
 
@@ -87,9 +88,7 @@ namespace EAS_Development_Interfaces
 
 
             var files = Directory
-                .GetFiles($@"{BaseDirectory}\Plugins")
-                .Where(file => file.ToLower()
-                    .EndsWith(".dll"))
+                .GetFiles($@"{BaseDirectory}\Plugins","*.dll")
                 .ToList();
 
             newDomains = files.Select(GetDomain).ToList();
