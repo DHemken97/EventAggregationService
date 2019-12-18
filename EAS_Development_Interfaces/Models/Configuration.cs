@@ -57,15 +57,14 @@ namespace EAS_Development_Interfaces
         }
         public static void Unload(AppDomain domain)
         {
-            var all = domain.GetAssemblies().Select(a => a.FullName);
-            throw  new Exception(string.Join("\r\n",all));
 
-            var filePath = domain.GetAssemblies().FirstOrDefault().CodeBase;
-            Commands.Where(c => domain.GetAssemblies().Contains(c.GetType().Assembly)).ToList().ForEach(c => Commands.Remove(c));
-            EventConsumers.Where(c => domain.GetAssemblies().Contains(c.GetType().Assembly)).ToList().ForEach(c => EventConsumers.Remove(c));
-            EventSources.Where(c => domain.GetAssemblies().Contains(c.GetType().Assembly)).ToList().ForEach(c => EventSources.Remove(c));
-            Services.Where(c => domain.GetAssemblies().Contains(c.GetType().Assembly)).ToList().ForEach(c =>{c.Stop();Services.Remove(c);});
-            Bindings.Where(c => domain.GetAssemblies().Contains(c.GetType().Assembly)).ToList().ForEach(c => Bindings.Remove(c));
+            var assembly = domain.GetAssemblies()[1];
+            var filePath = assembly.CodeBase;
+            Commands.Where(c => assembly == c.GetType().Assembly).ToList().ForEach(c => Commands.Remove(c));
+            EventConsumers.Where(c => assembly == c.GetType().Assembly).ToList().ForEach(c => EventConsumers.Remove(c));
+            EventSources.Where(c => assembly == c.GetType().Assembly).ToList().ForEach(c => EventSources.Remove(c));
+            Services.Where(c => assembly == c.GetType().Assembly).ToList().ForEach(c =>{c.Stop();Services.Remove(c);});
+            Bindings.Where(c => assembly == c.GetType().Assembly).ToList().ForEach(c => Bindings.Remove(c));
             Domains.Remove(domain);
             AppDomain.Unload(domain);
 
