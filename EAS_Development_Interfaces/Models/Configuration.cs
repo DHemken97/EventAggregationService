@@ -58,9 +58,9 @@ namespace EAS_Development_Interfaces
             var filePath = domain.GetAssemblies().FirstOrDefault().CodeBase;
             AppDomain.Unload(domain);
             Domains.Remove(domain);
-            GC.Collect(); // collects all unused memory
-            GC.WaitForPendingFinalizers(); // wait until GC has finished its work
-            GC.Collect();
+          //  GC.Collect(); // collects all unused memory
+          //  GC.WaitForPendingFinalizers(); // wait until GC has finished its work
+           // GC.Collect();
             File.Delete(filePath);
         }
 
@@ -68,8 +68,9 @@ namespace EAS_Development_Interfaces
         {
             var name = Path.GetFileNameWithoutExtension(path);
             var _appDomain = AppDomain.CreateDomain(name);
-            var runtimePath = $@"{BaseDirectory}\{name}.dll";
-                _appDomain.Load(AssemblyName.GetAssemblyName(runtimePath));
+            var runtimePath = $@"{BaseDirectory}\{name}_Plugin.dll";
+            File.Copy(path, runtimePath);
+            _appDomain.Load(AssemblyName.GetAssemblyName(runtimePath));
                 return _appDomain;
 
         }
