@@ -92,9 +92,7 @@ namespace EAS_Development_Interfaces
 
 
             var files = Directory
-                .GetFiles($@"{BaseDirectory}\Plugins")
-                .Where(file => file.ToLower()
-                    .EndsWith(".dll"))
+                .GetFiles($@"{BaseDirectory}\Plugins","*_Plugin.dll")
                 .ToList();
 
             newDomains = files.Select(GetDomain).ToList();
