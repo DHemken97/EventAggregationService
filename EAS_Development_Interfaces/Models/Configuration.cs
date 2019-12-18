@@ -68,9 +68,9 @@ namespace EAS_Development_Interfaces
             Directory.SetCurrentDirectory($"{BaseDirectory}\\Plugins");
 
            // var an = new AssemblyName("");
-            throw new Exception(AssemblyName.GetAssemblyName(path).ToJson());
-            //    _appDomain.Load(an);
-                    //  _appDomain.Load(AssemblyName.GetAssemblyName(path));
+           var data = File.ReadAllBytes(path);
+           _appDomain.Load(data);
+                      //_appDomain.Load(AssemblyName.GetAssemblyName(path));
                 return _appDomain;
 
         }
