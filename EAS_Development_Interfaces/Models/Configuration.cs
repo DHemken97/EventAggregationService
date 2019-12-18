@@ -82,6 +82,7 @@ namespace EAS_Development_Interfaces
         }
         private static AppDomain GetDomain(string path)
         {
+            if (Domains.Any(d => d.GetAssemblies().Any(a => a.CodeBase == path))) return null;
             var name = Path.GetFileNameWithoutExtension(path);
             var _appDomain = AppDomain.CreateDomain(name);
             var runtimePath = $@"{BaseDirectory}\{name}.dll";
@@ -112,9 +113,9 @@ namespace EAS_Development_Interfaces
                 .GetFiles($@"{BaseDirectory}\Plugins","*.dll")
                 .ToList();
 
-            newDomains = files.Select(GetDomain).ToList();
-            var existingDomains = newDomains.Where(d => Domains.Any(ed => ed.FriendlyName == d.FriendlyName)).ToList();
-            existingDomains.ForEach(a => newDomains.Remove(a));
+            newDomains = files.Select(GetDomain).Where(f => f!=null).ToList();
+            //var existingDomains = newDomains.Where(d => Domains.Any(ed => ed.FriendlyName == d.FriendlyName)).ToList();
+            //existingDomains.ForEach(a => newDomains.Remove(a));
 
         }
 
