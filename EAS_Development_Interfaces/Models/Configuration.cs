@@ -68,7 +68,7 @@ namespace EAS_Development_Interfaces
         {
             var name = Path.GetFileNameWithoutExtension(path);
             var _appDomain = AppDomain.CreateDomain(name);
-            var RuntimePath = $@"{BaseDirectory}\..\{name}.plugin.dll";
+            var RuntimePath = $@"{BaseDirectory}\{name}.plugin.dll";
             File.Copy(path,RuntimePath);
            _appDomain.Load(RuntimePath);
                 return _appDomain;
