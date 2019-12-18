@@ -63,7 +63,7 @@ namespace EAS_Development_Interfaces
             EventSources.Where(c => domain.GetAssemblies().Contains(c.GetType().Assembly)).ToList().ForEach(c => EventSources.Remove(c));
             Services.Where(c => domain.GetAssemblies().Contains(c.GetType().Assembly)).ToList().ForEach(c =>{c.Stop();Services.Remove(c);});
             Bindings.Where(c => domain.GetAssemblies().Contains(c.GetType().Assembly)).ToList().ForEach(c => Bindings.Remove(c));
-            AppDomain.Unload(domain);
+           // AppDomain.Unload(domain);
             Domains.Remove(domain);
           //  GC.Collect(); // collects all unused memory
           //  GC.WaitForPendingFinalizers(); // wait until GC has finished its work
