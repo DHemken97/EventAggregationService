@@ -64,12 +64,11 @@ namespace EAS_Development_Interfaces
 
         private static AppDomain GetDomain(string pluginPath)
         {
-            var _appDomain = AppDomain.CreateDomain(Path.GetFileNameWithoutExtension(pluginPath));
-            var assembly = Assembly.LoadFile(pluginPath);
-            _appDomain.Load(assembly.GetName(true));
-            //var assembly = _appDomain.Load(AssemblyName.GetAssemblyName(pluginPath));
-            //_appDomain.SetData("FriendlyName",assembly.GetName().Name);
-                return _appDomain;
+            AppDomainSetup tcpSimplexAppDomainSetup = new AppDomainSetup() { ApplicationBase = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) };
+            var _appDomain = AppDomain.CreateDomain("RecreateClientConnectionTests_Server", null, tcpSimplexAppDomainSetup);
+       
+            _appDomain.Load(Assembly.LoadFrom(pluginPath).GetName());
+            return _appDomain;
         }
 
         public static string Reload()
