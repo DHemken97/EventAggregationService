@@ -92,7 +92,7 @@ namespace EAS_Development_Interfaces
 
 
             var files = Directory
-                .GetFiles($@"{BaseDirectory}\Plugins","*_Plugin.dll")
+                .GetFiles($@"{BaseDirectory}\Plugins","*.dll")
                 .ToList();
 
             newDomains = files.Select(GetDomain).ToList();
