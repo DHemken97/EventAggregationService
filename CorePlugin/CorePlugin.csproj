@@ -48,6 +48,7 @@
     <Compile Include="Commands\Reload.cs" />
     <Compile Include="Commands\Shutdown.cs" />
     <Compile Include="Commands\Help.cs" />
+    <Compile Include="Commands\Unload.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\TelnetWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

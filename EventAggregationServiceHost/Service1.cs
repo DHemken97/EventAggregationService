@@ -46,7 +46,7 @@ namespace EventAggregationServiceHost
         {
             Configuration.Services.ForEach(service => service.Stop());
             Configuration.Bindings.ForEach(binding => File.WriteAllText($@"{BaseDirectory}\Bindings\{binding.Source}_{binding.Target}.json",binding.ToJson()));
-            Configuration.Domains.ForEach(Configuration.Unload);
+          //  Configuration.Domains.ForEach(Configuration.Unload);
         }
        
     }
