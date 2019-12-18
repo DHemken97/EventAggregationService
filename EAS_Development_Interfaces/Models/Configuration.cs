@@ -140,7 +140,7 @@ namespace EAS_Development_Interfaces
 
         private static List<TType> GetClassesOfType<TType>()
         {
-            return newDomains.Select(d => d.GetAssemblies().FirstOrDefault())
+            return newDomains.SelectMany(d => d.GetAssemblies())
                 .SelectMany(assembly => assembly.GetTypes().Where(type => typeof(TType).IsAssignableFrom(type)))
                 .Select(c => (TType)Activator.CreateInstance(c))
                 .ToList();
