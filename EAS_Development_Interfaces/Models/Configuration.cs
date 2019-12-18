@@ -64,7 +64,7 @@ namespace EAS_Development_Interfaces
 
         private static AppDomain GetDomain(string pluginPath)
         {
-            AppDomainSetup tcpSimplexAppDomainSetup = new AppDomainSetup() { ApplicationBase = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location+"Plugins\\") };
+            AppDomainSetup tcpSimplexAppDomainSetup = new AppDomainSetup() { ApplicationBase = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location+"\\Plugins\\") };
             var _appDomain = AppDomain.CreateDomain("RecreateClientConnectionTests_Server", null, tcpSimplexAppDomainSetup);
        
             _appDomain.Load(Assembly.LoadFrom(pluginPath).GetName());
