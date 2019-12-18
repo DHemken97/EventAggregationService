@@ -95,9 +95,6 @@ namespace CorePlugin.Services
             
             if (string.IsNullOrWhiteSpace(client.LastCommand))
             {
-                var vals = Encoding.ASCII.GetBytes(command);
-                var str = string.Join("-", vals.Select(Convert.ToInt16));
-                writer.Write($"Recieved '{str}'\r\n");
                 command = "help";
             }
             if (string.IsNullOrWhiteSpace(command)) return;

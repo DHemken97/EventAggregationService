@@ -12,7 +12,7 @@ namespace EAS_Development_Interfaces.Helpers
     {
         public static void RunTaskWithSpinner(IConsoleWriter writer,string message, Action action)
         {
-            c = '/';
+            _c = '/';
             var bgw = new BackgroundWorker();
             bgw.RunWorkerCompleted += Bgw_RunWorkerCompleted;
             bgw.DoWork += delegate
@@ -25,29 +25,29 @@ namespace EAS_Development_Interfaces.Helpers
 
             while (IsRunning)
             {
-                switch (c)
+                switch (_c)
                 {
                     case '/':
-                        c = '-';
+                        _c = '-';
                         break;
                     case '-':
-                        c = '\\';
+                        _c = '\\';
                         break;
                     case '\\':
-                        c = '|';
+                        _c = '|';
                         break;
                     case '|':
-                        c = '/';
+                        _c = '/';
                         break;
                    
                 }
-                writer.Write($"\r{message}{c}");
+                writer.Write($"\r{message}{_c}");
                 System.Threading.Thread.Sleep(100);
             }
 
         }
         private static bool IsRunning { get; set; }
-        private static char c;
+        private static char _c;
 
         private static void Bgw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {

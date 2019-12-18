@@ -119,21 +119,25 @@ namespace PluginManager.Internal
             }
 
             name = plugin.name.ToLower().Replace("plugin", "");
-            TaskSpinner.RunTaskWithSpinner(_consoleWriter,$"Installing {name} Plugin...",()=> {
-                var url = tree.url;
-                var Folder = HttpRequestHelper.Get<GitTreeRoot>(url);
-                var fileDetails = HttpRequestHelper.Get<GitTreeRoot>(Folder.tree.FirstOrDefault().url);
-                var file = HttpRequestHelper.Get<GitFile>(fileDetails.url);
-                var bytes = Convert.FromBase64String(file.content);
-                File.WriteAllBytes($"{Configuration.BaseDirectory}/Plugins/{plugin.name}.dll", bytes);
-                Configuration.Reload();
-                var isSuccess = Configuration.Domains.Any(a => a.FriendlyName.Contains(plugin.name));
-                var message = isSuccess ? "Success" : "Failed";
-                System.Threading.Thread.Sleep(10000);
-                _consoleWriter.Write($"\rInstalling {name} Plugin...{message}\r\n");
-            });
+
+            TaskSpinner.RunTaskWithSpinner(_consoleWriter,$"Installing {name} Plugin...",()=> {DownloadAndInstall(tree,plugin);});
            
 
+        }
+
+        private void DownloadAndInstall(Tree tree,GitObject plugin)
+        {
+            var name = plugin.name.ToLower().Replace("plugin", "");
+            var url = tree.url;
+            var folder = HttpRequestHelper.Get<GitTreeRoot>(url);
+            var fileDetails = HttpRequestHelper.Get<GitTreeRoot>(folder.tree.FirstOrDefault().url);
+            var file = HttpRequestHelper.Get<GitFile>(fileDetails.url);
+            var bytes = Convert.FromBase64String(file.content);
+            File.WriteAllBytes($"{Configuration.BaseDirectory}/Plugins/{plugin.name}.dll", bytes);
+            Configuration.Reload();
+            var isSuccess = Configuration.Domains.Any(a => a.FriendlyName.Contains(plugin.name));
+            var message = isSuccess ? "Success" : "Failed";
+            _consoleWriter.Write($"\rInstalling {name} Plugin...{message}\r\n");
         }
     }
 }
