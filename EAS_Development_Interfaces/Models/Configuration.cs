@@ -122,15 +122,15 @@ namespace EAS_Development_Interfaces
 
         private static void LoadCommands()
         {
-            Commands = GetClassesOfType<ICommand>();
+            Commands.AddRange(GetClassesOfType<ICommand>());
         }
         private static void LoadConsumers()
         {
-            EventConsumers = GetClassesOfType<IEventConsumer>();
+            EventConsumers.AddRange(GetClassesOfType<IEventConsumer>());
         }
         private static void LoadSources()
         {
-            EventSources = GetClassesOfType<IEventSource>();
+            EventSources.AddRange(GetClassesOfType<IEventSource>());
         }
         private static void LoadServices()
         {
@@ -143,11 +143,9 @@ namespace EAS_Development_Interfaces
         }
         private static void CreateBindings()
         {
-            Bindings = new List<Binding>();
+
             var files = Directory
-                .GetFiles($@"{BaseDirectory}\Bindings")
-                .Where(file => file.ToLower()
-                    .EndsWith(".json"))
+                .GetFiles($@"{BaseDirectory}\Bindings","*.json")
                 .ToList();
             files.ForEach(file => Bindings.Add(File.ReadAllText(file).FromJson<Binding>()));
             var result = Bindings.All(b => b.Bind());
