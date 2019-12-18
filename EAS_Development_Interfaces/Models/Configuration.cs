@@ -55,18 +55,20 @@ namespace EAS_Development_Interfaces
         }
         public static void Unload(AppDomain domain)
         {
+            var filePath = domain.GetAssemblies().FirstOrDefault().CodeBase;
             AppDomain.Unload(domain);
             Domains.Remove(domain);
             GC.Collect(); // collects all unused memory
             GC.WaitForPendingFinalizers(); // wait until GC has finished its work
             GC.Collect();
+            File.Delete(filePath);
         }
 
         private static AppDomain GetDomain(string path)
         {
             var name = Path.GetFileNameWithoutExtension(path);
             var _appDomain = AppDomain.CreateDomain(name);
-            var runtimePath = $@"{BaseDirectory}\{name}.dll";
+            var runtimePath = $@"{BaseDirectory}\{name}.Plugin.dll";
                 _appDomain.Load(AssemblyName.GetAssemblyName(runtimePath));
                 return _appDomain;
 
