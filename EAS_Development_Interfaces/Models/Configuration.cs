@@ -66,9 +66,9 @@ namespace EAS_Development_Interfaces
 
         private static AppDomain GetDomain(string path)
         {
-            
-            var _appDomain = AppDomain.CreateDomain(Path.GetFileNameWithoutExtension(path));
-            var RuntimePath = path.Replace(".dll", ".plugin.dll");
+            var name = Path.GetFileNameWithoutExtension(path);
+            var _appDomain = AppDomain.CreateDomain(name);
+            var RuntimePath = $@"{BaseDirectory}{name}.plugin.dll";
             File.Copy(path,RuntimePath);
            _appDomain.Load(RuntimePath);
                 return _appDomain;
