@@ -47,7 +47,6 @@ namespace EAS_Development_Interfaces
             CreateBindings();
             Domains.AddRange(newDomains);
             newDomains = new List<AppDomain>();
-            new Dump_Config().Execute();
             
         }
         public static void Unload(string domainName)
@@ -67,14 +66,20 @@ namespace EAS_Development_Interfaces
             Bindings.Where(c => assembly == c.GetType().Assembly).ToList().ForEach(c => Bindings.Remove(c));
             Domains.Remove(domain);
             AppDomain.Unload(domain);
-
             GC.Collect(); // collects all unused memory
             GC.WaitForPendingFinalizers(); // wait until GC has finished its work
             GC.Collect();
             
-             File.Delete(filePath);
+             //File.Delete(filePath);
         }
 
+        private static async void Delete(string path)
+        {
+            await Task.Run(() =>
+            {
+
+            });
+        }
         private static AppDomain GetDomain(string path)
         {
             var name = Path.GetFileNameWithoutExtension(path);
@@ -154,93 +159,6 @@ namespace EAS_Development_Interfaces
                 .Select(c => (TType)Activator.CreateInstance(c))
                 .ToList();
         }
-    }
-
-
-    public  class Dump_Config 
-    {
-        public string Name { get => "Dump_Config"; }
-        public string Description { get => "Lists All Values in running config"; }
-        public void Execute()
-        {
-            File.WriteAllText($@"{Configuration.BaseDirectory}\config.txt", GetValues());
-        }
-        public string GetValues()
-        {
-            return
-             ListAssemblies() +
-             ListBootstrappers() +
-             ListServices() +
-             ListCommands() +
-             ListSources() +
-             ListConsumers() +
-             ListBindings();
-
-        }
-
-        private string ListBindings()
-        {
-            string result = $"Created {Configuration.Bindings.Count} Bindings\r\n";
-            foreach (var binding in Configuration.Bindings)
-            {
-                result += $"{binding.Source} -> {binding.Target}\r\n";
-            }
-
-            return result;
-        }
-
-
-        private string ListAssemblies()
-        {
-            string result = $"Loaded {Configuration.Domains.Count} Assemblies\r\n";
-            foreach (var assembly in Configuration.Domains)
-            {
-                result += $"{assembly.FriendlyName}\r\n";
-            }
-
-            return result;
-        }
-        private string ListBootstrappers()
-        {
-            return $"Loaded {Configuration.Bootstrappers.Count} Bootstrappers\r\n";
-        }
-
-        private string ListServices()
-        {
-            return $"Loaded {Configuration.Services.Count} Services\r\n";
-        }
-        private string ListCommands()
-        {
-            string result = $"Loaded {Configuration.Commands.Count} Commands\r\n";
-            foreach (var command in Configuration.Commands)
-            {
-                result += $"{command.Name}   -   {command.Description}\r\n";
-            }
-
-            return result;
-        }
-        private string ListSources()
-        {
-            string result = $"Loaded {Configuration.EventSources.Count} Event Sources\r\n";
-            foreach (var eventSource in Configuration.EventSources)
-            {
-                result += $"{eventSource.Name} {(eventSource.IsRunning ? "Started" : "Stopped")}   -   {eventSource.Description}\r\n";
-            }
-
-            return result;
-        }
-        private string ListConsumers()
-        {
-            string result = $"Loaded {Configuration.EventConsumers.Count} Event Consumers\r\n";
-            foreach (var eventConsumer in Configuration.EventConsumers)
-            {
-                result += $"{eventConsumer.Name}   -   {eventConsumer.Description}\r\n";
-            }
-
-            return result;
-        }
-
-
     }
 
 }
