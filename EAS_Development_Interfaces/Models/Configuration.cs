@@ -64,11 +64,12 @@ namespace EAS_Development_Interfaces
 
         private static AppDomain GetDomain(string path)
         {
-            var _appDomain = AppDomain.CreateDomain(Path.GetFileNameWithoutExtension(path));
-            Directory.SetCurrentDirectory($"{BaseDirectory}\\Plugins");
-
-
-                _appDomain.Load(AssemblyName.GetAssemblyName(path));
+            var name = Path.GetFileNameWithoutExtension(path);
+            var _appDomain = AppDomain.CreateDomain(name);
+            var runtimePath = $@"{BaseDirectory}\{name}.plugin.dll";
+            File.Copy(path,runtimePath);
+            System.Threading.Thread.Sleep(5000);
+                _appDomain.Load(runtimePath);
                 return _appDomain;
 
         }
