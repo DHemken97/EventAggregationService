@@ -66,7 +66,7 @@ namespace EAS_Development_Interfaces
         {
             var _appDomain = AppDomain.CreateDomain(Path.GetFileNameWithoutExtension(path));
             Directory.SetCurrentDirectory($"{BaseDirectory}\\Plugins");
-
+            
 
                 _appDomain.Load(AssemblyName.GetAssemblyName(path));
                 return _appDomain;
