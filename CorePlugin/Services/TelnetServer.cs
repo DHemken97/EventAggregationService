@@ -92,8 +92,10 @@ namespace CorePlugin.Services
         }
         void HandleCommand(Client client, string command,IConsoleWriter writer)
         {
+            
             if (string.IsNullOrWhiteSpace(client.LastCommand))
             {
+                writer.Write($"Recieved '{command}'\r\n");
                 command = "help";
             }
             if (string.IsNullOrWhiteSpace(command)) return;
