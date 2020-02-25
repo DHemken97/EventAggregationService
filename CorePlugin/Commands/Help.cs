@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using EAS_Development_Interfaces;
+using EAS_Development_Interfaces.Interfaces;
 using EAS_Development_Interfaces.Models;
 
 namespace CorePlugin.Commands
@@ -11,8 +12,11 @@ namespace CorePlugin.Commands
             get => "Help";
         }
         public string Description { get => "Display commands"; }
-        
-        public string Execute(CommandElements parameters)
+        public void Execute(CommandElements parameters, IConsoleWriter console)
+        {
+            console.Write(GetResult(parameters));
+        }
+        public string GetResult(CommandElements parameters)
         {
             var commands = Configuration.Commands;
             var searchValue = parameters?.Arguments.FirstOrDefault();
@@ -27,5 +31,7 @@ namespace CorePlugin.Commands
             }
             return result;
         }
+
+
     }
 }

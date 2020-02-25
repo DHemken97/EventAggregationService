@@ -36,6 +36,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,9 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\CommandFormatter.cs" />
+    <Compile Include="Helpers\TaskSpinner.cs" />
+    <Compile Include="Interfaces\IConsoleWriter.cs" />
     <Compile Include="Models\Binding.cs" />
     <Compile Include="Models\CommandElements.cs" />
     <Compile Include="Models\Configuration.cs" />
+    <Compile Include="Models\ConsoleWriter.cs" />
     <Compile Include="Models\DictionaryEventArgs.cs" />
     <Compile Include="Interfaces\IBootstrapper.cs" />
     <Compile Include="Interfaces\ICommand.cs" />

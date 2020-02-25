@@ -1,5 +1,7 @@
 ﻿using EAS_Development_Interfaces;
+using EAS_Development_Interfaces.Interfaces;
 using EAS_Development_Interfaces.Models;
+using System.IO;
 
 namespace CorePlugin.Commands
 {
@@ -7,7 +9,12 @@ namespace CorePlugin.Commands
     {
         public string Name { get=>"Dump_Config"; }
         public string Description { get=> "Lists All Values in running config"; }
-        public string Execute(CommandElements parameters)
+        public void Execute(CommandElements parameters, IConsoleWriter console)
+        {
+            File.WriteAllText($@"{Configuration.BaseDirectory}\config.txt", GetValues());
+            console.Write(GetValues());
+        }
+        public string GetValues()
         {  return 
             ListAssemblies()+
             ListBootstrappers()+
@@ -33,10 +40,10 @@ namespace CorePlugin.Commands
 
         private string ListAssemblies()
         {
-            string result = $"Loaded {Configuration.Assemblies.Count} Assemblies\r\n";
-            foreach (var assembly in Configuration.Assemblies)
+            string result = $"Loaded {Configuration.Domains.Count} Assemblies\r\n";
+            foreach (var assembly in Configuration.Domains)
             {
-                result += $"{assembly.FullName}\r\n";
+                result += $"{assembly.FriendlyName}\r\n";
             }
 
             return result;
@@ -80,5 +87,7 @@ namespace CorePlugin.Commands
 
             return result;
         }
+
+    
     }
 }

@@ -1,4 +1,5 @@
-﻿using EAS_Development_Interfaces.Models;
+﻿using EAS_Development_Interfaces.Interfaces;
+using EAS_Development_Interfaces.Models;
 
 namespace EAS_Development_Interfaces
 {
@@ -6,6 +7,6 @@ namespace EAS_Development_Interfaces
     {
         string Name { get; }
         string Description { get; }
-        string Execute(CommandElements parameters);
+        void Execute(CommandElements parameters,IConsoleWriter console);
     }
 }

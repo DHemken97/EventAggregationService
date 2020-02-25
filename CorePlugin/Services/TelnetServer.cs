@@ -8,12 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using CorePlugin.Models;
 using EAS_Development_Interfaces.Helpers;
+using EAS_Development_Interfaces.Interfaces;
 
 namespace CorePlugin.Services
 {
     public class TelnetServer : IService
     {
         public static List<Client> Clients { get; private set; }
+        public bool IsRunning { get; private set; }
         public void Start()
         {
             Clients = new List<Client>();
@@ -21,6 +23,8 @@ namespace CorePlugin.Services
             {
                 RunServer(port);
             }
+
+            IsRunning = true;
         }
 
         private TcpListener _server;
@@ -39,31 +43,33 @@ namespace CorePlugin.Services
 
                 await Task.Run(() =>
                 {
-                    while (true)
+                    try
                     {
-
-                        var client = _server.AcceptTcpClient();
-                        var listEntry = new Client(client);
-                        Clients.Add(listEntry);
-                        var stream = client.GetStream();
-
-                        int i;
-
-                        while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+                        while (true)
                         {
-                            data = Encoding.ASCII.GetString(bytes, 0, i);
 
+                            var client = _server.AcceptTcpClient();
+                            var listEntry = new Client(client);
+                            Clients.Add(listEntry);
+                            var stream = client.GetStream();
+                            int i;
 
-                            var reply = HandleCommand(listEntry,data);
-                            var msg = Encoding.ASCII.GetBytes(reply);
+                            while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+                            {
+                                data = Encoding.ASCII.GetString(bytes, 0, i);
+                                var writer = new TelnetWriter(client);
+                                HandleCommand(listEntry, data, writer);
 
-                            stream.Write(msg, 0, msg.Length);
+                            }
+
+                            client.Close();
+                            Clients.Remove(listEntry);
                         }
-
-                        client.Close();
-                        Clients.Remove(listEntry);
                     }
-
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
                 });
 
             }
@@ -72,23 +78,34 @@ namespace CorePlugin.Services
                 Console.WriteLine("SocketException: {0}", e);
                 throw;
             }
+            catch (Exception e)
+            {
+
+            }
             finally
             {
                 _server?.Stop();
+                IsRunning = false;
             }
 
 
         }
-        string HandleCommand(Client client,string command)
+        void HandleCommand(Client client, string command,IConsoleWriter writer)
         {
-            if (string.IsNullOrWhiteSpace(command)) return string.Empty;
+            
+            if (string.IsNullOrWhiteSpace(client.LastCommand))
+            {
+                command = "help";
+            }
+            if (string.IsNullOrWhiteSpace(command)) return;
             Clients.Remove(client);
             client.UpdateCommandStats(command);
             Clients.Add(client);
-            var commandElements =command.BreakdownCommand();
+            var commandElements = command.BreakdownCommand();
             var c = Configuration.Commands?.FirstOrDefault(cmd => cmd?.Name?.ToLower() == commandElements?.command?.ToLower());
-            var result = c?.Execute(commandElements) ?? Unknown();
-            return result;
+
+            if (c != null) c.Execute(commandElements, writer);
+            else writer.Write(Unknown());
         }
         string Unknown()
         {
@@ -96,7 +113,16 @@ namespace CorePlugin.Services
         }
         public void Stop()
         {
-            _server.Stop();
+            try
+            {
+                _server.Stop();
+                IsRunning = false;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
     }
 }

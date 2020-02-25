@@ -45,9 +45,12 @@
     <Compile Include="Commands\Execute.cs" />
     <Compile Include="Commands\List_Connections.cs" />
     <Compile Include="Commands\Listen.cs" />
+    <Compile Include="Commands\Reload.cs" />
     <Compile Include="Commands\Shutdown.cs" />
     <Compile Include="Commands\Help.cs" />
+    <Compile Include="Commands\Unload.cs" />
     <Compile Include="Models\Client.cs" />
+    <Compile Include="Models\TelnetWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\TelnetServer.cs" />
   </ItemGroup>
@@ -80,10 +83,15 @@ rem ren $(TargetPath) $(TargetDir)$(TargetName)%25VERSION%25</PostBuildEvent>
       $(PostBuildEventDependsOn);
       PostBuildMacros;
     </PostBuildEventDependsOn>
-    <PostBuildEvent>mkdir "D:\EAS Plugins\Core\@(VersionNumber)"
-copy "$(TargetPath)" "D:\EAS Plugins\Core\@(VersionNumber)"
-git add -A
-git commit -m "Build $(TargetName) Version @(VersionNumber)"
-git push</PostBuildEvent>
+    <PostBuildEvent>N:
+cd EAS_Plugins
+IF EXIST "N:\EAS_Plugins\$(ProjectName)\@(VersionNumber)\" exit
+      mkdir "N:\EAS_Plugins\$(ProjectName)\@(VersionNumber)"
+      copy "$(TargetPath)" "N:\EAS_Plugins\$(ProjectName)\@(VersionNumber)"
+
+      git add -A
+      git commit -m "Build $(TargetName) Version @(VersionNumber)"
+      git push
+</PostBuildEvent>
   </PropertyGroup>
 </Project>
